@@ -95,7 +95,7 @@ repo_url=argo-repo-url
 ```bash
 mkdir /opt/soft
 chmod 777 /opt/soft
-sh standalone_remote_installer.sh install Grafana_123 4.1.12 centos7 root 'HJUiju)@)$' test_remote_installer  32 
+sh standalone_remote_installer.sh install Grafana_123 4.1.12 centos7 root 'HJUiju)@)$' platformName  32 
 ```
 
 | 参数 | 定义 |
@@ -105,7 +105,7 @@ sh standalone_remote_installer.sh install Grafana_123 4.1.12 centos7 root 'HJUij
 | centos7 | 你的操作系统的类型只支持centos6和centos7 |
 | root | 安装用户，如果使用非root用户安装，要求这个用户必须有免密码sudo能力 |
 | 'HJUiju)@)$' | 你使用的用户的密码 |
-| test_remote_installer | 你这套环境名称，只能是英文字母和数字 |
+| platformName | 你这套环境名称，只能是英文字母和数字 |
 | 32 | 你机器内存的大小，只支持32/64/128 |
 
 _注意：该脚本不允许nohup后台执行，因为过程中会有询问您的操作的过程，所以请关注脚本的输出。_
@@ -155,6 +155,7 @@ sudo su - streaming
 
 SDK往方舟里上报数据，需要知道方舟收数的地址。默认情况下，可以使用 http://${该机器的外网ip}:8089 来上报数据，我们将该地址导入到方舟中。
 ```bash
+sudo su - streaming
 /opt/soft/streaming/bin/init_data_entrance_url.sh http://${该机器的外网ip}:8089
 ```
 但是IOS的SDK上报数据需要https，这种情况下，您需要单独部署一套nginx的机器，并配置域名访问。具体请参考文档：《部署前置nginx》
