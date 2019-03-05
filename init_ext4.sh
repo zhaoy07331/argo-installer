@@ -1,15 +1,11 @@
 #!/bin/bash
 
 set -e
-#设置变量
-dns_server=114.114.114.114
-num=1
-disk_list=""
 
 #添加新版日志目录和权限
 /bin/mkdir -p /opt/soft/log && /bin/chmod -R 777 /opt/soft/log/
 
-#修改history格式 
+#修改history格式
 /bin/sed -i '/HISTTIMEFORMAT=/d' /etc/profile;
 /bin/echo 'export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  `whoami` "' >> /etc/profile
 source /etc/profile
@@ -21,13 +17,6 @@ source /etc/profile
 /usr/bin/rm /etc/localtime && /usr/bin/ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 date -R | grep +0800
 
-#修改dns
-/bin/echo -e "\033[1;33m 修改DNS服务器 \033[0m"
-
-/bin/echo "nameserver ${dns_server}" > /etc/resolv.conf
-#echo "nameserver 114.114.114.114" >> /etc/resolv.conf
-cat /etc/resolv.conf | grep nameserver
-
 #加入crond
 
 echo '*/15 * * * * root /usr/sbin/ntpdate ark1.analysys.xyz;/sbin/hwclock -w >> /var/log/ntpdate.log 2>&1'   >  /etc/cron.d/fangzhou
@@ -35,16 +24,18 @@ echo '30 1 * * * root find /tmp/ -mtime +7 -name "hadoop-unjar*" -exec rm -rf {}
 echo '30 1 * * * root find /opt/soft/log/ -mtime +7 -name "*" -type f -exec rm -rf {} \;'   >>  /etc/cron.d/fangzhou
 echo '30 1 * * * root find /data/micro-services/ -mtime +7 -name "*.log" -type f -exec rm -rf {} \;'   >>  /etc/cron.d/fangzhou
 echo '30 1 * * * root find /data/micro-services/ -mtime +7 -name "*.out" -type f -exec rm -rf {} \;'   >>  /etc/cron.d/fangzhou
-
+echo '30 1 * * * root /bin/cp -rf /var/log/analysys-mysql/mysql.log /var/log/analysys-mysql/bak_mysql.log && echo "backup" > /var/log/analysys-mysql/mysql.log' >> /etc/cron.d/fangzhou
+echo '30 1 * * * root /bin/cp -rf /var/log/analysys-mysql/slow.log /var/log/analysys-mysql/bak_slow.log && echo "backup" > /var/log/analysys-mysql/slow.log' >> /etc/cron.d/fangzhou
+echo '30 1 * * * root /bin/cp -rf /var/log/ambari-server/ambari-server.log /var/log/ambari-server/bak_ambari-server.log && echo "clean" > /var/log/ambari-server/ambari-server.log' >> /etc/cron.d/fangzhou
 
 #关闭防火墙和selinux
 /bin/echo -e "\033[1;33m 关闭防火墙和selinux  \033[0m"
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 if [ "`getenforce`" == "Enforcing" ];then
-        setenforce 0;
-        /bin/echo -e "\033[1;33m  Now is `getenforce` \033[0m";
+	setenforce 0;
+	/bin/echo -e "\033[1;33m  Now is `getenforce` \033[0m";
 else
-        /bin/echo -e "\033[1;33m selinux is `getenforce` \033[0m";
+	/bin/echo -e "\033[1;33m selinux is `getenforce` \033[0m";
 fi
 
 
@@ -115,29 +106,8 @@ echo 'session required pam_limits.so' >> /etc/pam.d/login
 /bin/echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.conf
 /bin/echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf
 sysctl -p
-#格盘挂载
-echo -e "\033[1;33m 准备开始格盘和挂载 \033[0m";
-
-sed -i '/data/d' /etc/fstab;
-
-for disk_name in ${disk_list};
-
-do
-       echo -e "\033[1;33m format /dev/${disk_name}; \033[0m"
-       mkfs.ext4 -F -L data${num} /dev/${disk_name} && echo -e "\033[1;32m LABEL data${num} is ok \033[0m";
-#       mkfs.xfs -f -L data${num} /dev/${disk_name} && echo -e "\033[1;32m LABEL data${num} is ok \033[0m";
-       rm -rf /data${num} && echo -e "\033[1;33m del /data${num} \033[0m";
-       mkdir /data${num} && echo -e "\033[1;33m mkdir /data${num} \033[0m";
-#       echo "LABEL=data${num}             /data${num}       xfs    defaults,noatime,nodiratime        0 0" >> /etc/fstab;
-       echo "LABEL=data${num}             /data${num}       ext4    defaults,noatime,nodiratime        0 0" >> /etc/fstab;
-       echo -e "\033[1;33m check fstab \033[0m"
-       cat /etc/fstab |grep data;
-       num=$[$num+1];
-       echo "";
-done
-
-mount -a
 
 df -Th
 
 echo -e "\033[1;33m 初始化完毕，部分配置需要重新登录服务器生效！  \033[0m"
+
