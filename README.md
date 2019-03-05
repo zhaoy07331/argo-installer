@@ -4,53 +4,74 @@
 ---
 
 
-# 1.1  方舟Argo远程自动化安装文档
+# 1.1  方舟Argo自动化安装文档
 # 一、环境准备
 
 ## 1.1  系统要求
+方舟Argo安装部署手册的主要目的是指导使用该系统的用户方便快捷的安装系统和配置。
+如果您已经下载好了安装包，请参考[离线安装](#offline_install)。
 
-方舟Argo安装部署手册的主要目的是指导手册使用该系统的用户方便快捷的安装系统和配置。
-该文档指导用户自动安装。所有脚本地址在
-https://github.com/analysys/argo-installer
-如果您已经自己下载好了安装包，请使用《方舟产品单机离线部署文档》。
+## 1.2 网络要求
+能连通外网
 
-## 1.2 系统要求
+
+## 1.3 硬件要求
+* 测试环境：
+    * 8Core 32G内存 
+    * 系统盘:50G 
+    * 数据盘:250G硬盘。
+* 正式环境：
+    * 16Core64G内存 
+    * 系统盘:300G 
+    * 数据盘:>500G磁盘，并且做RAID1或更高级别的配置。
+
+## 1.4 系统要求
 | 系统及其组件          | 系统要求    | 
 | ----------------       | :-----   | 
 | 操作系统        | CentOS 7和 Redhat 7版本、强烈建议CentOS7.4|
-| 磁盘目录        | 系统盘：一定要有/opt目录，而且空间大小不能小于300G;数据盘：如果有多块数据盘，要做raid，最终只识别/data1目录。单机版本建议做raid10| 
+| 磁盘目录        | 系统盘：一定要有/opt目录,最终只识别/data1目录。| 
 | 主机名          | 不能大写,不能有下划线"_"      |
 | 系统编码        | UTF-8      |
 | 软件环境        | 不支持混合部署|
 
 
-## 1.3 网络要求
 
-能连通外网
 
-## 1.4 硬件要求
-
-由于硬件服务器所装组件不一致,对系统资源的占用情况不尽相同，对硬件配置的要求也不一样，具体情况根据项目的硬件规划情况来。
 
 ## 1.5 安装包说明
 
-standalone_remote_installer.sh 远程安装脚本
-
-init_ext4.sh 环境检查脚本，检查环境是否有问题
+* standalone_remote_installer.sh  远程安装脚本
+* standalone_offline_installer.sh 本地安装脚本
+* init_ext4.sh 环境检查脚本，检查环境是否有问题
 
 # 二、开始安装
 
 ## 2.1 准备工作
+* 在线安装
+    1. 将以下文件放到/opt/soft目录下
+        1. standalone_remote_installer.sh
 
-1. 数据盘做raid10，挂载目录/data1下
-2. 创建/opt/soft目录并把/opt/soft权限设置为777
-3. 将standalone_remote_installer.sh文件拷贝到机器上/opt/soft目录下。
-4. 将init_ext4.sh脚本拷贝到机器上/opt/soft目录，执行该脚本检查机器是否满足要求。
+* <span id="offline_install">离线安装</span> _**在线自动安装，跳过该步骤**_
+    1. argo-repo-url地址下载安装包，或者通过百度网盘下载
+    ![](imgs/7.png)
+    2. 将以下文件放到/opt/soft目录下。
+        1. analysys_installer_base_centos7.tar.gz
+        2. analysys_installer_base_centos7.tar.gz.md5
+        3. ark_centos7_4.1.12.tar.gz
+        4. ark_centos7_4.1.12.tar.gz
+        5. standalone_offline_installer.sh
 
-``` bash
-sudo chmod -R 777 /opt/soft
-sudo sh init_ext4.sh
-```
+
+
+* 后续操作
+    1. 数据盘做raid10，挂载目录/data1下
+    2. 创建/opt/soft目录并把/opt/soft权限设置为777
+    3. 将init_ext4.sh脚本拷贝到机器上/opt/soft目录，执行该脚本检查机器是否满足要求。
+    
+    ``` bash
+    sudo chmod -R 777 /opt/soft
+    sudo sh init_ext4.sh
+    ```
 
 ## 2.2 配置/etc/hosts
 
@@ -87,35 +108,43 @@ ${该服务器的内网ip} ark1.analysys.xyz ark1
 
 ###2.3.1 安装
 以下操作以4.1.12版本为样例
-配置服务器下载地址，修改config.properties
-```bash
-repo_url=argo-repo-url
-```
+1. 在线安装：配置服务器下载地址，修改config.properties
+    ```bash
+    repo_url=argo-repo-url
+    ```
 
-```bash
-mkdir /opt/soft
-chmod 777 /opt/soft
-sh standalone_remote_installer.sh install Grafana_123 4.1.12 centos7 root 'HJUiju)@)$' platformName  32 
-```
+    ```bash
+    mkdir /opt/soft
+    chmod 777 /opt/soft
+    sh standalone_remote_installer.sh install Grafana_123 4.1.12 centos7 root 'HJUiju)@)$' platformName  32 
+    ```
+2. 离线安装：
+    ```bash
+    mkdir /opt/soft
+    chmod 777 /opt/soft
+    sh standalone_offline_installer.sh install Grafana_123 4.1.12 centos7 root 'HJUiju)@)$' platformName  32 
+    ```
 
-| 参数 | 定义 |
-| :--- | :--- |
-| Grafana_123 | 你的mysql的root密码 |
-| 4.1.12 | 你要安装的方舟的版本号 |
-| centos7 | 你的操作系统的类型只支持centos6和centos7 |
-| root | 安装用户，如果使用非root用户安装，要求这个用户必须有免密码sudo能力 |
-| 'HJUiju)@)$' | 你使用的用户的密码 |
-| platformName | 你这套环境名称，只能是英文字母和数字 |
-| 32 | 你服务器内存的大小，只支持32/64/128 |
-
-_注意：该脚本不允许nohup后台执行，因为过程中会有询问您的操作的过程，所以请关注脚本的输出。_
-
-在安装的过程中可以通过访问http://ark1.analysys.xyz:8080界面来查看安装细节，但请不要做任何操作。
-
-等待脚本执行完成。
-
-如果这一步安装报错或意外退出了终端，请参考《安装问题处理》文档
-
+3. 参数定义：    
+    
+    | 参数 | 定义 |
+    | :--- | :--- |
+    | Grafana_123 | 你的mysql的root密码 |
+    | 4.1.12 | 你要安装的方舟的版本号 |
+    | centos7 | 你的操作系统的类型只支持centos6和centos7 |
+    | root | 安装用户，如果使用非root用户安装，要求这个用户必须有免密码sudo能力 |
+    | 'HJUiju)@)$' | 你使用的用户的密码 |
+    | platformName | 你这套环境名称，只能是英文字母和数字 |
+    | 32 | 你服务器内存的大小，只支持32/64/128 |
+    
+    _注意：该脚本不允许nohup后台执行，因为过程中会有询问您的操作的过程，所以请关注脚本的输出。_
+    
+    在安装的过程中可以通过访问http://ark1.analysys.xyz:8080界面来查看安装细节，但请不要做任何操作。
+    
+    等待脚本执行完成。
+    
+    如果这一步安装报错或意外退出了终端，请参考《安装问题处理》文档
+    
 
 
 ### 2.3.2 安装完成后，检查未成功启动的服务：
