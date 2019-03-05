@@ -38,7 +38,7 @@ standalone_remote_installer.sh 远程安装脚本
 
 init_ext4.sh 环境检查脚本，检查环境是否有问题
 
-# 二、集群安装
+# 二、开始安装
 
 ## 2.1 准备工作
 
@@ -54,14 +54,14 @@ sudo sh init_ext4.sh
 
 ## 2.2 配置/etc/hosts
 
-1. 如果所有主机都已经有hostname，则直接进行第2步操作，如果没有配置，则需要给每台机器设置hostname
+1. 如果所有主机都已经有hostname，则直接进行第2步操作，如果没有配置，则需要给服务器设置hostname
 
-    1.1 登陆每台机器，执行
+    1.1 登陆服务器，执行
     ```bash
     hostname -f
     ```
     
-    1.2 查看该机器的主机名,如果返回的结果是localhost，则说明该机器没有设置主机名。
+    1.2 查看该服务器的主机名,如果返回的结果是localhost，则说明该服务器没有设置主机名。
 
     1.3 以root用户或sudo执行
     ```bash
@@ -75,13 +75,13 @@ sudo sh init_ext4.sh
 
 2. 配置/etc/hosts文件
 ```
-${该机器的内网ip} ark1.analysys.xyz ark1 
+${该服务器的内网ip} ark1.analysys.xyz ark1 
 ```
 注意，目前只支持 ark1.analysys.xyz，这个/etc/hosts文件也必须这么写
 
-有3列内容，第一列为主机的ip地址，第二列是集群Ambari使用的FANQ格式的主机名,第三列是该ip对应的主机名。
+有3列内容，第一列为主机的ip地址，第二列是Ambari使用的FANQ格式的主机名,第三列是该ip对应的主机名。
 
-保存后将该文件复制到所有机器的/etc目录下。
+保存后将该文件复制到所有服务器的/etc目录下。
 
 ## 2.3 开始安装
 
@@ -106,7 +106,7 @@ sh standalone_remote_installer.sh install Grafana_123 4.1.12 centos7 root 'HJUij
 | root | 安装用户，如果使用非root用户安装，要求这个用户必须有免密码sudo能力 |
 | 'HJUiju)@)$' | 你使用的用户的密码 |
 | platformName | 你这套环境名称，只能是英文字母和数字 |
-| 32 | 你机器内存的大小，只支持32/64/128 |
+| 32 | 你服务器内存的大小，只支持32/64/128 |
 
 _注意：该脚本不允许nohup后台执行，因为过程中会有询问您的操作的过程，所以请关注脚本的输出。_
 
@@ -120,7 +120,7 @@ _注意：该脚本不允许nohup后台执行，因为过程中会有询问您�
 
 ### 2.3.2 安装完成后，检查未成功启动的服务：
 
-浏览器输入http://${该机器的内网ip}:8080
+浏览器输入http://${该服务器的内网ip}:8080
 
 用户名密码默认为admin  admin
 
@@ -153,12 +153,12 @@ sudo su - streaming
 
 ## 2.5 初始化收数地址
 
-SDK往方舟里上报数据，需要知道方舟收数的地址。默认情况下，可以使用 http://${该机器的外网ip}:8089 来上报数据，我们将该地址导入到方舟中。
+SDK往方舟里上报数据，需要知道方舟收数的地址。默认情况下，可以使用 http://${该服务器的外网ip}:8089 来上报数据，我们将该地址导入到方舟中。
 ```bash
 sudo su - streaming
-/opt/soft/streaming/bin/init_data_entrance_url.sh http://${该机器的外网ip}:8089
+/opt/soft/streaming/bin/init_data_entrance_url.sh http://${该服务器的外网ip}:8089
 ```
-但是IOS的SDK上报数据需要https，这种情况下，您需要单独部署一套nginx的机器，并配置域名访问。具体请参考文档：《部署前置nginx》
+但是IOS的SDK上报数据需要https，这种情况下，您需要单独部署一套nginx的服务器，并配置域名访问。具体请参考文档：《部署前置nginx》
 
 
 
