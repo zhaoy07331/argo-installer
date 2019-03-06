@@ -69,7 +69,7 @@
         1. analysys_installer_base_centos7.tar.gz
         2. analysys_installer_base_centos7.tar.gz.md5
         3. ark_centos7_4.1.12.tar.gz
-        4. ark_centos7_4.1.12.tar.gz
+        4. ark_centos7_4.1.12.tar.gz.md5
         5. standalone_offline_installer.sh
 
 * 后续操作
