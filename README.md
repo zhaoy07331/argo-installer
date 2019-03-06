@@ -58,6 +58,24 @@
 # 开始安装
 
 ## 准备工作
+
+**如果您通过windows机器下载脚本并上传到服务器上，过程中可能会导致shell脚本的文件格式变成dos，所以请先使用如下命令将shell脚本格式做个转换**
+
+```
+#下载安装dos2unix工具
+yum install dos2unix -y
+
+#转换文件格式
+dos2unix init_ext4.sh
+
+#在线安装
+dos2unix standalone_remote_installer.sh
+
+#如果使用离线安装
+dos2unix standalone_offline_installer.sh
+```
+
+
 * 在线安装
     1. 将以下文件放到/opt/soft目录下
         1. standalone_remote_installer.sh
