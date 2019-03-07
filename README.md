@@ -135,7 +135,7 @@ ${该服务器的内网ip} ark1.analysys.xyz ark1
 
 ### 安装
 以下操作以4.1.12版本为样例
-1. 在线安装：配置服务器下载地址，修改config.properties
+1. 在线安装：配置服务器下载地址，修改[config.properties](https://github.com/analysys/argo-installer/blob/master/config.properties)
     ```bash
     repo_url=argo-repo-url
     ```
