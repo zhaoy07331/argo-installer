@@ -162,10 +162,7 @@ if [ ""$action == "install" ];then
     repo_url=${repo_url##*=}
     export repo_url
 
-    if [ ""$repo_url == ""  ];then
-        echo "请先配置config.properties文件中的源地址"
-        exit
-    fi
+
 
     if [ $node_memory -ne 32 -a $node_memory -ne 64 -a $node_memory -ne 128 ];then
         echo "node_memory只支持32，64，128，不支持其它值"
