@@ -23,6 +23,8 @@
 # 环境准备
 
 ## 系统要求
+请尽量不要让您的公网ip直接对外，不然会有中毒的风险。您可以使用内网ip通过网关的方式来访问外网。
+
 方舟Argo安装部署手册的主要目的是指导使用该系统的用户方便快捷的安装系统和配置。
 如果您已经下载好了安装包，请参考[离线安装](#offline_install)。
 
@@ -240,6 +242,13 @@ admin/111111
 - [SDK指南](https://ark.analysys.cn/docs/sdk.html)
 - [功能使用说明](https://ark.analysys.cn/docs/function.html)
 - [常见问题](https://ark.analysys.cn/docs/faq.html)
+
+## 删除项目
+argo可以在管理界面上通过项目管理模块来创建项目，但如果您想删除项目，需要您登陆argo的后台操作。
+```
+su - streaming
+/opt/soft/streaming/drop_project.sh $appkey
+```
 
 # 社群
 
