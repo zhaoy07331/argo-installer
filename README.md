@@ -81,6 +81,7 @@ dos2unix standalone_offline_installer.sh
 * 在线安装
     1. 将以下文件放到/opt/soft目录下
         1. standalone_remote_installer.sh
+        2. config.properties
 
 * <span id="offline_install">离线安装</span> _**在线自动安装，跳过该步骤**_
     1. argo-repo-url地址下载安装包，或者通过百度网盘下载
@@ -91,6 +92,7 @@ dos2unix standalone_offline_installer.sh
         3. ark_centos7_4.1.12.tar.gz
         4. ark_centos7_4.1.12.tar.gz.md5
         5. standalone_offline_installer.sh
+        6. config.properties
 
 * 后续操作
     1. 数据盘做raid10，挂载目录/data1下
