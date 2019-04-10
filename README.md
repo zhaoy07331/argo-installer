@@ -71,7 +71,7 @@
     ```
 
 * 在线安装
-    1. 从https://github.com/analysys/argo-installer地址下载argo-installer项目，解压后将config.properties和standalone_remote_installer.sh , init_ext4.sh放到/opt/soft目录下
+    1. 从 https://github.com/analysys/argo-installer 地址下载argo-installer项目，解压后将config.properties和standalone_remote_installer.sh , init_ext4.sh放到/opt/soft目录下
     
         ```
         yum install wget unzip -y
