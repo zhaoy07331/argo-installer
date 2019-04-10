@@ -61,46 +61,57 @@
 
 ## 准备工作
 
-**如果您通过windows机器下载脚本并上传到服务器上，过程中可能会导致shell脚本的文件格式变成dos，所以请先使用如下命令将shell脚本格式做个转换**
+以下操作以4.1.12版本为样例，有些操作中涉及到的文件需要根据您安装的具体的版本号来定
 
-```
-#下载安装dos2unix工具
-yum install dos2unix -y
+* 创建目录
 
-#转换文件格式
-dos2unix init_ext4.sh
-
-#在线安装
-dos2unix standalone_remote_installer.sh
-
-#如果使用离线安装
-dos2unix standalone_offline_installer.sh
-```
-
+    先创建/opt/soft目录，/opt目录应该在系统盘上，可参考如下命令
+    ```
+    mkdir /opt/soft
+    ```
 
 * 在线安装
-    1. 将以下文件放到/opt/soft目录下
-        1. standalone_remote_installer.sh
-        2. config.properties
+    1. 从https://github.com/analysys/argo-installer地址下载argo-installer项目，解压后将config.properties和standalone_remote_installer.sh , init_ext4.sh放到/opt/soft目录下
+    
+        ```
+        yum install wget unzip -y
+        cd /tmp
+        wget https://github.com/analysys/argo-installer/archive/master.zip
+        unzip master.zip
+        cp argo-installer-master/config.properties /opt/soft/
+        cp argo-installer-master/standalone_remote_installer.sh /opt/soft/
+        cp argo-installer-master/init_ext4.sh /opt/soft/
+        ```
 
 * <span id="offline_install">离线安装</span> _**在线自动安装，跳过该步骤**_
     1. argo-repo-url地址下载安装包，或者通过百度网盘下载
     ![](imgs/7.png)
-    2. 将以下文件放到/opt/soft目录下。
-        1. analysys_installer_base_centos7.tar.gz
-        2. analysys_installer_base_centos7.tar.gz.md5
-        3. ark_centos7_4.1.12.tar.gz
-        4. ark_centos7_4.1.12.tar.gz.md5
-        5. standalone_offline_installer.sh
-        6. config.properties
+    
+    2. 将下载的analysys_installer_base_centos7.tar.gz ， analysys_installer_base_centos7.tar.gz.md5 ， ark_centos7_4.1.12.tar.gz ， ark_centos7_4.1.12.tar.gz.md5 4个文件放到服务器/opt/soft目录下。
+    
+    3. 从https://github.com/analysys/argo-installer地址下载argo-installer项目,然后解压后将config.properties和standalone_offline_installer.sh , init_ext4.sh文件放到服务器/opt/soft目录下
+    
+    4. **如果您通过windows机器下载脚本并上传到服务器上，过程中可能会导致shell脚本的文件格式变成dos，所以请先使用如下命令将shell脚本格式做个转换**
+       
+       ```
+       cd /opt/soft
+       
+       #下载安装dos2unix工具
+       yum install dos2unix -y
+       
+       #转换文件格式
+       dos2unix init_ext4.sh
+       
+       #如果使用离线安装
+       dos2unix standalone_offline_installer.sh
+       ```
+    
 
 * 后续操作
-    1. 数据盘做raid10，挂载目录/data1下
-    2. 创建/opt/soft目录并把/opt/soft权限设置为777
-    3. 将init_ext4.sh脚本拷贝到机器上/opt/soft目录，执行该脚本检查机器是否满足要求。
+    
+    将init_ext4.sh脚本拷贝到机器上/opt/soft目录，执行该脚本检查机器是否满足要求。需要使用root用户或有sudo权限的普通用户
     
     ``` bash
-    sudo chmod -R 777 /opt/soft
     sudo sh init_ext4.sh
     ```
 
@@ -113,7 +124,7 @@ dos2unix standalone_offline_installer.sh
     hostname -f
     ```
     
-    1.2 查看该服务器的主机名,如果返回的结果是localhost，则说明该服务器没有设置主机名。
+    1.2 查看该服务器的主机名,如果返回的结果不是ark1，则说明该服务器没有设置主机名。
 
     1.3 以root用户或sudo执行
     ```bash
@@ -125,7 +136,12 @@ dos2unix standalone_offline_installer.sh
     ```
     命令查看返回值，如果是我们设置的主机名，主机名设置成功！
 
-2. 配置/etc/hosts文件
+2. 配置/etc/hosts文件，使用vi命令编辑该文件
+
+```
+vi /etc/hosts
+```
+添加内容如下
 ```
 ${该服务器的内网ip} ark1.analysys.xyz ark1 
 ```
@@ -139,20 +155,18 @@ ${该服务器的内网ip} ark1.analysys.xyz ark1
 
 ### 安装
 以下操作以4.1.12版本为样例
-1. 在线安装：配置服务器下载地址，修改[config.properties](https://github.com/analysys/argo-installer/blob/master/config.properties)
+1. 在线安装：配置服务器下载地址，修改/opt/soft/config.properties文件
     ```bash
     repo_url=argo-repo-url
     ```
 
     ```bash
-    mkdir /opt/soft
-    chmod 777 /opt/soft
+    cd /opt/soft
     sh standalone_remote_installer.sh install Grafana_123 4.1.12 centos7 root 'HJUiju)@)$' platformName  32 
     ```
 2. 离线安装：
     ```bash
-    mkdir /opt/soft
-    chmod 777 /opt/soft
+    cd /opt/soft
     sh standalone_offline_installer.sh install Grafana_123 4.1.12 centos7 root 'HJUiju)@)$' platformName  32 
     ```
 
@@ -175,6 +189,36 @@ ${该服务器的内网ip} ark1.analysys.xyz ark1
     等待脚本执行完成。
     
     如果这一步安装报错或意外退出了终端，请参考《安装问题处理》文档
+    
+4. 安装过程中需要交互确认，需要您输入y或yes来确认
+    
+    1. 是否分发jdk,配置系统ulimit参数，是否安装并配置ntp
+    
+        ```
+        ******************************************************************************
+         ============step 3 .开始分发安装 jdk,config ulimit,ntp......================= 
+        if install install jdk and change ulimit ...in all host  [y/n]:
+        ```
+        输入```y``` 即可
+    
+    2. 打通免密
+    
+        ```
+        The authenticity of host 'ark1.analysys.xyz (172.31.45.102)' can't be established.
+        ECDSA key fingerprint is SHA256:x5kT/VUuQMVZy9O4lOKZCLxM6gEFoARECU2Tul8vhvs.
+        ECDSA key fingerprint is MD5:b4:0b:ea:00:e9:65:b2:f3:10:7d:bb:43:d6:a4:9b:3a.
+        Are you sure you want to continue connecting (yes/no)?
+        ```
+        输入 ```yes``` 即可
+    
+    3. 是否配置自己的时间同步操作
+    
+        ```
+        if install your own time server [y/n]:
+        ```
+        输入 ```y``` 即可
+    
+    
 
 ### 安装完成后，检查未成功启动的服务：
 
