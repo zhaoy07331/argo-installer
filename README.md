@@ -61,7 +61,7 @@
 
 ## 准备工作
 
-以下操作以4.1.12版本为样例，有些操作中涉及到的文件需要根据您安装的具体的版本号来定
+以下操作以4.1.17版本为样例，有些操作中涉及到的文件需要根据您安装的具体的版本号来定
 
 * 创建目录
 
@@ -87,7 +87,7 @@
     1. argo-repo-url地址下载安装包，或者通过百度网盘下载
     ![](imgs/7.png)
     
-    2. 将下载的analysys_installer_base_centos7.tar.gz ， analysys_installer_base_centos7.tar.gz.md5 ， ark_centos7_4.1.12.tar.gz ， ark_centos7_4.1.12.tar.gz.md5 4个文件放到服务器/opt/soft目录下。
+    2. 将下载的analysys_installer_base_centos7.tar.gz ， analysys_installer_base_centos7.tar.gz.md5 ， ark_centos7_4.1.17.tar.gz ， ark_centos7_4.1.17.tar.gz.md5 4个文件放到服务器/opt/soft目录下。
     
     3. 从https://github.com/analysys/argo-installer地址下载argo-installer项目,然后解压后将config.properties和standalone_offline_installer.sh , init_ext4.sh文件放到服务器/opt/soft目录下
     
@@ -154,7 +154,7 @@ ${该服务器的内网ip} ark1.analysys.xyz ark1
 ## 开始安装
 
 ### 安装
-以下操作以4.1.12版本为样例
+以下操作以4.1.17版本为样例
 1. 在线安装：配置服务器下载地址，修改/opt/soft/config.properties文件
     ```bash
     repo_url=argo-repo-url
@@ -162,12 +162,12 @@ ${该服务器的内网ip} ark1.analysys.xyz ark1
 
     ```bash
     cd /opt/soft
-    sh standalone_remote_installer.sh install Grafana_123 4.1.12 centos7 root 'HJUiju)@)$' platformName  32 
+    sh standalone_remote_installer.sh install Grafana_123 4.1.17 centos7 root 'HJUiju)@)$' platformName  32 
     ```
 2. 离线安装：
     ```bash
     cd /opt/soft
-    sh standalone_offline_installer.sh install Grafana_123 4.1.12 centos7 root 'HJUiju)@)$' platformName  32 
+    sh standalone_offline_installer.sh install Grafana_123 4.1.17 centos7 root 'HJUiju)@)$' platformName  32 
     ```
 
 3. 参数定义：    
@@ -175,7 +175,7 @@ ${该服务器的内网ip} ark1.analysys.xyz ark1
     | 参数         | 定义                                                               |
     | :----------- | :----------------------------------------------------------------- |
     | Grafana_123  | 你的mysql的root密码                                                |
-    | 4.1.12       | 你要安装的方舟的版本号                                             |
+    | 4.1.17      | 你要安装的方舟的版本号                                             |
     | centos7      | 你的操作系统的类型，目前全面支持centos6和centos7,redhat6,redhat7系列                          |
     | root         | 安装用户，如果使用非root用户安装，要求这个用户必须有免密码sudo能力 |
     | 'HJUiju)@)$' | 你使用的用户的密码                                                 |
