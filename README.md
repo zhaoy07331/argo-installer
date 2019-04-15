@@ -255,7 +255,22 @@ sudo su - streaming
 ```
 但是IOS的SDK上报数据需要https，这种情况下，您需要单独部署一套nginx的服务器，并配置域名访问。具体请参考文档：《部署前置nginx》
 
-# 5.开始使用
+
+## 5. 开启故障自动恢复
+
+### 开启自动恢复功能，开启后，异常挂掉的服务会自己恢复重启
+
+![](imgs/3.png)
+然后:
+![](imgs/4.png)
+
+### 修改Ambari管理员用户admin的密码
+![](imgs/5.png)
+然后:
+![](imgs/6.png)
+完成！
+
+# 6.开始使用
 
 ## 管理后台
 
@@ -287,19 +302,6 @@ su - streaming
 /opt/soft/streaming/drop_project.sh $appkey
 ```
 
-## 6.后续操作建议
-
-### 开启自动恢复功能，开启后，异常挂掉的服务会自己恢复重启
-
-![](imgs/3.png)
-然后:
-![](imgs/4.png)
-
-### 修改Ambari管理员用户admin的密码
-![](imgs/5.png)
-然后:
-![](imgs/6.png)
-完成！
 
 # 社群
 
