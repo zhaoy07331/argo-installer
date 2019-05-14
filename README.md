@@ -178,7 +178,7 @@ SDK往方舟里上报数据，需要知道方舟收数的地址。默认情况�
 
 ```bash
 sudo su - streaming
-/opt/soft/streaming/bin/init_data_entrance_url.sh https://${您配置的前置nginx的域名}:8089
+/opt/soft/streaming/bin/init_data_entrance_url.sh https://${您配置的前置nginx的域名}:4089
 ```
 
 
