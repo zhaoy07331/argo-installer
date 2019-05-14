@@ -285,16 +285,16 @@ http://ip:4005/
 ```
 admin/111111
 ```
-接下来，你为自己创建一个日常使用的[账号](https://ark.analysys.cn/docs/enterprise-basic-function-member.html)，并创建一个[项目](https://ark.analysys.cn/docs/enterprise-basic-function-project-management.html)。
+接下来，你为自己创建一个日常使用的[账号](https://docs.analysys.cn/ark/features/enterprise-management/member)，并创建一个[项目](https://docs.analysys.cn/ark/features/enterprise-management/project-management)。
 
 ## 数据接入
 
 完成了上述步骤就正式进入了易观方舟Argo的探索之旅，下面是一些快速开始的文档：
 
-- [接入前准备](https://ark.analysys.cn/docs/integration-prepare.html)
-- [SDK指南](https://ark.analysys.cn/docs/sdk.html)
-- [功能使用说明](https://ark.analysys.cn/docs/function.html)
-- [常见问题](https://ark.analysys.cn/docs/faq.html)
+- [快速上手](https://docs.analysys.cn/ark/)
+- [接入前准备](https://docs.analysys.cn/ark/integration/prepare)
+- [SDK指南](https://docs.analysys.cn/ark/integration/sdk)
+- [常见问题](https://docs.analysys.cn/ark/faq/sdk)
 
 ## 删除项目
 argo可以在管理界面上通过项目管理模块来创建项目，但如果您想删除项目，需要您登陆argo的后台操作。
