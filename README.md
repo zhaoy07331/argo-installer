@@ -168,32 +168,21 @@
 按上图中的1、2、3步骤操作完成，直到没有红色叹光的服务。另外需要注意的是，由于服务状态检查有一定的延时，所以在安装完成过几分钟后再进行该操作，操作完成后也需要观察一段时间再看结果。
 
 
-## 3.导入License
+## 3.初始化收数地址（可选操作，使用IOS SDK时需要）
 
-这一步骤的所有操作需要在**streaming**用户下执行，所以需要先切换到streaming用户。
+SDK往方舟里上报数据，需要知道方舟收数的地址。默认情况下，我们已经在安装脚本中将argo数据上报地址 http://${该服务器的外网ip}:8089 导入到了方舟argo中 。
 
-开始导入license，依次执行如下命令
-```bash
-#先退出终端再登入，保证所有环境变量被加载
-exit
-
-#重新登入终端
-sudo su - streaming
-/opt/soft/streaming/bin/init_license_info.sh 1 495D220F07341C03B1FC7CB4F25455227B29990C9B7511C26FEE4C76D72E1D14477CC6AD54741B8414DE9BF2B787351FA2E2F4FC9DF24F19FBDD4395BB2CC0A645FC2E9749DEA34A09FB58378D758E0A9903E2642F10FC464F5AF8D7A6AC41B31065A6D0CF2EE9FD1B047C5B40B24C76848C3568C3ACE24E3C48C5796E7CC585D4587CA5D4F3FC17F6C45C71426E4867DDA80A10D26E79E95DA2437DC72A428193B728B51A9D77914C7C5437C6CFD1B3
-/opt/soft/streaming/bin/update_enterprise_code.sh wByeDrLc 1
-```
-
-## 4.初始化收数地址
-
-SDK往方舟里上报数据，需要知道方舟收数的地址。默认情况下，可以使用 http://${该服务器的外网ip}:8089 来上报数据，我们将该地址导入到方舟中。
-```bash
-sudo su - streaming
-/opt/soft/streaming/bin/init_data_entrance_url.sh http://${该服务器的外网ip}:8089
-```
 但是IOS的SDK上报数据需要https，这种情况下，您需要单独部署一套nginx的服务器，并配置域名访问。具体请参考文档：《部署前置nginx》
 
+然后将您配置的域名导入到argo中。
 
-## 5. 开启故障自动恢复
+```bash
+sudo su - streaming
+/opt/soft/streaming/bin/init_data_entrance_url.sh https://${您配置的前置nginx的域名}:8089
+```
+
+
+## 4. 开启故障自动恢复
 
 ### 开启自动恢复功能，开启后，异常挂掉的服务会自己恢复重启
 
@@ -207,7 +196,7 @@ sudo su - streaming
 ![](imgs/6.png)
 完成！
 
-# 6.开始使用
+# 5.开始使用
 
 ## 管理后台
 
@@ -238,6 +227,8 @@ argo可以在管理界面上通过项目管理模块来创建项目，但如果�
 su - streaming
 /opt/soft/streaming/drop_project.sh $appkey
 ```
+
+# 问题处理
 
 
 # 社群
