@@ -84,7 +84,7 @@
         cp argo-installer-master/init_ext4.sh /opt/soft/
         ```
 
-* <span id="offline_install">离线安装</span> _**在线自动安装，跳过该步骤**_
+* <span id="offline_install">离线安装</span> （_**在线自动安装，跳过该步骤**_）
     1. argo-repo-url地址下载安装包，或者通过百度网盘下载
     ![](imgs/7.png)
     
@@ -116,42 +116,6 @@
     sudo sh init_ext4.sh
     ```
 
-## 1.2配置/etc/hosts
-
-1. 如果所有主机都已经有hostname，则直接进行第2步操作，如果没有配置，则需要给服务器设置hostname
-
-    1.1 登陆服务器，执行
-    ```bash
-    hostname -f
-    ```
-    
-    1.2 查看该服务器的主机名,如果返回的结果不是ark1，则说明该服务器没有设置主机名。
-
-    1.3 以root用户或sudo执行
-    ```bash
-    hostnamectl set-hostname ark1
-    ```
-    1.4 检查主机名是否设置成功：
-    ```bash 
-    hostname -f 
-    ```
-    命令查看返回值，如果是我们设置的主机名，主机名设置成功！
-
-2. 配置/etc/hosts文件，使用vi命令编辑该文件
-
-```
-vi /etc/hosts
-```
-添加内容如下
-```
-${该服务器的内网ip} ark1.analysys.xyz ark1 
-```
-注意，目前只支持 ark1.analysys.xyz，这个/etc/hosts文件也必须这么写
-
-有3列内容，第一列为主机的ip地址，第二列是Ambari使用的FANQ格式的主机名,第三列是该ip对应的主机名。
-
-保存后将该文件复制到所有服务器的/etc目录下。
-
 ## 2.开始安装
 
 ### 2.1安装
@@ -163,62 +127,34 @@ ${该服务器的内网ip} ark1.analysys.xyz ark1
 
     ```bash
     cd /opt/soft
-    sh standalone_remote_installer.sh install Grafana_123 4.1.17 centos7 root 'HJUiju)@)$' platformName  32 
+    sh standalone_remote_installer.sh
     ```
 2. 离线安装：
     ```bash
     cd /opt/soft
-    sh standalone_offline_installer.sh install Grafana_123 4.1.17 centos7 root 'HJUiju)@)$' platformName  32 
+    sh standalone_offline_installer.sh
     ```
 
-3. 参数定义：    
+3. 输入必要的信息
+
+    安装脚本需要您提供一些必要的系统信息，请按要求填写
     
-    | 参数         | 定义                                                               |
-    | :----------- | :----------------------------------------------------------------- |
-    | Grafana_123  | 你的mysql的root密码                                                |
-    | 4.1.17      | 你要安装的方舟的版本号                                             |
-    | centos7      | 你的操作系统的类型，目前全面支持centos6和centos7,redhat6,redhat7系列                          |
-    | root         | 安装用户，如果使用非root用户安装，要求这个用户必须有免密码sudo能力 |
-    | 'HJUiju)@)$' | 你使用的用户的密码                                                 |
-    | platformName | 你这套环境名称，只能是英文字母和数字                               |
-    | 32           | 你服务器内存的大小，目前全面支持32/64/128三种配置，如果您机器内存在这三个数字之间，比如40G内存，建议向下取32。                                |
+    ```
+    为了顺利安装，我们将收集一些信息。请您仔细填写。
+    网卡和IP:
+           lo: 127.0.0.1
+           eth0: 172.31.43.79
+    请输入需要内网IP对应的网卡名称，默认 [eth0]: 
+    请输入您接下来的动作: install/upgrade. 默认[install]: 
+    请输入mysql的密码.默认[Eguan@123] ：
+    请输入argo的版本号，默认 [4.1.17]: 
+    请输入linux系统root用户的密码： Eguan)@)$
+    请再次输入linux系统root密码：Eguan)@)$
+    请输入集群名称，默认 [platformName]: 
+    请输入系统物理内存，只能为32/64/128,当前为 [64(G)]: 
+    请输入外网IP: 
     
-    _注意：该脚本不允许nohup后台执行，因为过程中会有询问您的操作的过程，所以请关注脚本的输出。_
-    
-    在安装的过程中可以通过访问 http://ark1.analysys.xyz:8080 界面来查看安装细节，但请不要做任何操作。
-    
-    等待脚本执行完成。
-    
-    如果这一步安装报错或意外退出了终端，请参考安装问题处理文档 http://geek.analysys.cn/topic/56 文档
-    
-4. 安装过程中需要交互确认，需要您输入y或yes来确认
-    
-    1. 是否分发jdk,配置系统ulimit参数，是否安装并配置ntp
-    
-        ```
-        ******************************************************************************
-         ============step 3 .开始分发安装 jdk,config ulimit,ntp......================= 
-        if install install jdk and change ulimit ...in all host  [y/n]:
-        ```
-        输入```y``` 即可
-    
-    2. 打通免密
-    
-        ```
-        The authenticity of host 'ark1.analysys.xyz (172.31.45.102)' can't be established.
-        ECDSA key fingerprint is SHA256:x5kT/VUuQMVZy9O4lOKZCLxM6gEFoARECU2Tul8vhvs.
-        ECDSA key fingerprint is MD5:b4:0b:ea:00:e9:65:b2:f3:10:7d:bb:43:d6:a4:9b:3a.
-        Are you sure you want to continue connecting (yes/no)?
-        ```
-        输入 ```yes``` 即可
-    
-    3. 是否配置自己的时间同步操作
-    
-        ```
-        if install your own time server [y/n]:
-        ```
-        输入 ```y``` 即可
-    
+    ```
     
 
 ### 2.2安装完成后，检查未成功启动的服务：
