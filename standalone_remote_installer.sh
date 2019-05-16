@@ -1,5 +1,135 @@
-#!/bin/bash
+#!/bin/bash 
+#by analysys
+#v1.0
+
+
+
+c_yellow="\e[1;33m"
+c_red="\e[1;31m"
+c_end="\e[0m"
+
+mkdir /root/.ssh
+chmod 700 /root/.ssh
+touch ~/.ssh/config
+cat > ~/.ssh/config << end
+UserKnownHostsFile /dev/null
+ConnectTimeout 15
+StrictHostKeyChecking no
+end
 set -e
+
+init_ext4(){
+	
+	#添加新版日志目录和权限
+	/bin/mkdir -p /opt/soft/log && /bin/chmod -R 777 /opt/soft/log/
+	
+	#修改history格式
+	/bin/sed -i '/HISTTIMEFORMAT=/d' /etc/profile;
+	/bin/echo 'export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  `whoami` "' >> /etc/profile
+	source /etc/profile
+	
+	/bin/echo LANG="en_US.UTF-8" > /etc/locale.conf
+	
+	#修改时区
+	/bin/echo -e "\033[1;33m 修改时区  \033[0m"
+	/usr/bin/rm /etc/localtime && /usr/bin/ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+	date -R | grep +0800
+	
+	#加入crond
+	
+        touch /etc/cron.d/fangzhou
+	echo '*/15 * * * * root /usr/sbin/ntpdate ark1.analysys.xyz;/sbin/hwclock -w >> /var/log/ntpdate.log 2>&1'   >  /etc/cron.d/fangzhou
+	echo '30 1 * * * root find /tmp/ -mtime +7 -name "hadoop-unjar*" -exec rm -rf {} \;'   >>  /etc/cron.d/fangzhou
+	echo '30 1 * * * root find /opt/soft/log/ -mtime +7 -name "*" -type f -exec rm -rf {} \;'   >>  /etc/cron.d/fangzhou
+	echo '30 1 * * * root find /data/micro-services/ -mtime +7 -name "*.log" -type f -exec rm -rf {} \;'   >>  /etc/cron.d/fangzhou
+	echo '30 1 * * * root find /data/micro-services/ -mtime +7 -name "*.out" -type f -exec rm -rf {} \;'   >>  /etc/cron.d/fangzhou
+	echo '30 1 * * * root /bin/cp -rf /var/log/analysys-mysql/mysql.log /var/log/analysys-mysql/bak_mysql.log && echo "backup" > /var/log/analysys-mysql/mysql.log' >> /etc/cron.d/fangzhou
+	echo '30 1 * * * root /bin/cp -rf /var/log/analysys-mysql/slow.log /var/log/analysys-mysql/bak_slow.log && echo "backup" > /var/log/analysys-mysql/slow.log' >> /etc/cron.d/fangzhou
+	echo '30 1 * * * root /bin/cp -rf /var/log/ambari-server/ambari-server.log /var/log/ambari-server/bak_ambari-server.log && echo "clean" > /var/log/ambari-server/ambari-server.log' >> /etc/cron.d/fangzhou
+	
+	#关闭防火墙和selinux
+	/bin/echo -e "\033[1;33m 关闭防火墙和selinux  \033[0m"
+	sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+	if [ "`getenforce`" == "Enforcing" ];then
+	        setenforce 0;
+	        /bin/echo -e "\033[1;33m  Now is `getenforce` \033[0m";
+	else
+	        /bin/echo -e "\033[1;33m selinux is `getenforce` \033[0m";
+	fi
+	
+	
+	set +e
+	systemctl stop firewalld.service
+	systemctl disable firewalld.service
+	systemctl stop postfix.service
+	systemctl disable postfix.service
+	systemctl stop irqbalance
+	systemctl disable irqbalance
+	systemctl enable rc-local.service
+	systemctl start rc-local.service
+	set -e
+	
+	
+	#关闭热键
+	/bin/rm -rf /usr/lib/systemd/system/ctrl-alt-del.target
+	
+	#系统优化
+	/bin/echo -e "\033[1;33m 系统参数调整  \033[0m"
+	/bin/echo '* soft nofile 100000' > /etc/security/limits.conf
+	/bin/echo '* hard nofile 100000' >> /etc/security/limits.conf
+	/bin/echo '* soft nproc 100000' >> /etc/security/limits.conf
+	/bin/echo '* hard nproc 100000' >> /etc/security/limits.conf
+	
+	###
+	/bin/sed -i "s/4096/100000/g" /etc/security/limits.d/20-nproc.conf
+	/bin/sed -i "s/#DefaultLimitCORE=/DefaultLimitCORE=infinity/g" /etc/systemd/system.conf
+	/bin/sed -i "s/#DefaultLimitNOFILE=/DefaultLimitNOFILE=100000/g" /etc/systemd/system.conf
+	/bin/sed -i "s/#DefaultLimitNPROC=/DefaultLimitNPROC=100000/g" /etc/systemd/system.conf
+	/bin/sed -i "s/#DefaultLimitCORE=/DefaultLimitCORE=infinity/g" /etc/systemd/user.conf
+	/bin/sed -i "s/#DefaultLimitNOFILE=/DefaultLimitNOFILE=100000/g" /etc/systemd/user.conf
+	/bin/sed -i "s/#DefaultLimitNPROC=/DefaultLimitNPROC=100000/g" /etc/systemd/user.conf
+	systemctl daemon-reload
+	###
+	sed -i '/session required pam_limits.so/d' /etc/pam.d/login
+	echo 'session required pam_limits.so' >> /etc/pam.d/login
+	
+	/bin/echo 'net.ipv4.tcp_sack = 1' > /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_window_scaling = 1' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_timestamps = 0' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_syncookies = 1' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_fin_timeout = 1' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_tw_reuse = 1' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_tw_recycle = 0' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_synack_retries = 1' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_syn_retries = 1' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_keepalive_time = 30' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.ip_local_port_range = 20000 65000' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_max_syn_backlog = 8192' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_max_tw_buckets = 30000' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_max_orphans = 3276800' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_max_syn_backlog = 262144' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_rmem = 4096 87380 4194304' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_wmem = 4096 16384 4194304' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.tcp_mem = 94500000 915000000 927000000' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv4.icmp_echo_ignore_broadcasts = 1' >> /etc/sysctl.conf
+	/bin/echo 'net.core.wmem_default = 8388608' >> /etc/sysctl.conf
+	/bin/echo 'net.core.rmem_default = 8388608' >> /etc/sysctl.conf
+	/bin/echo 'net.core.rmem_max = 16777216' >> /etc/sysctl.conf
+	/bin/echo 'net.core.wmem_max = 16777216' >> /etc/sysctl.conf
+	/bin/echo 'net.core.somaxconn = 16384' >> /etc/sysctl.conf
+	/bin/echo 'net.core.netdev_max_backlog = 16384' >> /etc/sysctl.conf
+	/bin/echo 'vm.swappiness = 10' >> /etc/sysctl.conf
+	/bin/echo 'fs.inotify.max_user_watches = 524288' >> /etc/sysctl.conf
+	/bin/echo 'fs.inotify.max_user_instances = 256' >> /etc/sysctl.conf
+	/bin/echo 'fs.inotify.max_queued_events = 32768' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.conf
+	/bin/echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf
+	sysctl -p
+	
+	df -Th
+	
+	echo -e "\033[1;33m 初始化完毕，部分配置需要重新登录服务器生效！  \033[0m"
+}
 
 
 function install()
@@ -187,45 +317,241 @@ function install()
     cd /opt/soft/analysys_installer
     echo "sh analysys_install.sh ark1.analysys.xyz 22 $mysql_root_password $blueprint $osType $install_user 1"
 
-    sh analysys_install.sh ark1.analysys.xyz 22 $mysql_root_password $blueprint $osType $install_user 1
+  echo "y"|  sh analysys_install.sh ark1.analysys.xyz 22 $mysql_root_password $blueprint $osType $install_user 1
 
 }
 
-if [ $# -lt 1 ];then
-  echo "sh standalone_remote_installer.sh install mysql_root_password version osType install_user install_user_password cluster_name(只能是英文和数字) node_memory(机器内存支持32,64,128这3个值)"
-  echo "sh standalone_remote_installer.sh upgrade version osType"
-  exit 1
+
+##提示信息
+echo -e "${c_yellow}为了顺利安装，我们将收集一些信息。请您仔细填写。${c_end}"
+
+#检查当前用户是否为root
+osuser=`whoami`
+if [ ${osuser} != "root" ];then
+        echo -e "\e[1;31m You must use root to execute script.\e[0m"
+        exit 99
 fi
 
-export action=$1
+#设置主机名
+hostnamectl set-hostname ark1
+
+#设置host文件
+#echo "internet name:"
+echo "网卡和IP:"
+for i in `ip addr | egrep "^[0-9]" | awk -F ':' '{print $2}'`
+do
+        echo -e "       \e[1;33m"$i": "`ifconfig $i | egrep -v "inet6" | awk -F 'net|netmaskt' '{print $2}' | sed ':label;N;s/\n//;b label' | sed -e 's/ //g' -e 's/)//g'`"\e[0m"
+done
+
+while true
+do
+        #read -p "`echo -e "please enter the name of Ethernet，default [${c_yellow}eth0${c_end}]: "`" eth
+        read -p "`echo -e "请输入需要内网IP对应的网卡名称，默认 [${c_yellow}eth0${c_end}]: "`" eth
+        ipaddr=`ifconfig ${eth:-eth0} 2> /dev/null | egrep -v "inet6" | awk -F'inet|netmask' '{print $2}' | sed ':label;N;s/\n//;b label' | sed 's/ //g'`
+        [ "${ipaddr:-None}" == "None" ]&& echo -e "pleas input the ${c_red}exact name of Ethernet${c_end}"&& continue
+        if [ -n "$(echo ${ipaddr} | sed 's/[0-9]//g' | sed 's/.//g')" ];then
+                echo -e 'shell can not obtain ip,pleas input the ${c_red}exact name of Ethernet${c_end}'
+        continue
+        else
+                echo "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 " > /etc/hosts
+                echo "::1         localhost localhost.localdomain localhost6 localhost6.localdomain6 " >> /etc/hosts
+                echo ${ipaddr}"     ark1.analysys.xyz ark1" >> /etc/hosts
+                break
+        fi
+done
+
+
+##获取安装相关信息
+#获取是安装还是升级
+while true
+do
+	read -p "`echo -e "请输入您接下来的动作: ${c_yellow}install/upgrade${c_end}. 默认[${c_yellow}install${c_end}]: "`" argo_action
+	
+	if [ "${argo_action:=install}" == "install" ];then
+		break
+	elif [ "${argo_action}" == "upgrade" ];then
+		#echo -e "${c_red}upgrade is not avable.${c_end}"
+		echo -e "${c_red}upgrade 暂时不可用。${c_end}"
+		#echo -e "${c_red}please use other options.${c_end}"
+		echo -e "${c_red}请输入其他选项。${c_end}"
+		continue
+	else
+		echo -e "${c_red}您输入的为无效选项，请输入正确选项动作。${c_end}"
+		continue
+	fi
+done
+
+#获取mysql密码
+while true
+do
+        read -p "`echo -e "请输入mysql的密码.默认[${c_yellow}Eguan@123${c_end}] ："`" mysql_pwd
+        if [ "${mysql_pwd:=Eguan@123}" == "None" ];then
+          
+                echo -e "${c_red}mysql不能为空。${c_end}"
+                continue
+        else
+                break
+        fi
+done
 
 
 
-if [ ""$action == "install" ];then
-    if [ $# -ne 8 ];then
-      echo "sh standalone_remote_installer.sh install mysql_root_password version osType install_user install_user_password cluster_name(只能是英文和数字) node_memory(机器内存支持32,64,128这3个值)"
-      echo "sh standalone_remote_installer.sh upgrade version osType"
-      exit 1
-    fi
-    export mysql_root_password=$2
-    export targetVersion=$3
-    export osType=$4
-    export install_user=$5
-    export install_user_password=$6
-    export cluster_name=$7
-    export node_memory=$8
+
+#获取mysql密码
+#while true
+#do
+#	#read -p "`echo -e "please enter the password of mysql 默认[${c_yellow}Eguan@123${c_end}] : "`" mysql_pwd
+#	read -p "`echo -e "请输入mysql的密码.默认[${c_yellow}Eguan@123${c_end}] ："`" mysql_pwd
+#	
+#	if [ "${mysql_pwd:-None}" == "None" ];then
+#		#echo -e "${c_red}The password of mysql is not empty.${c_end}"
+#		echo -e "${c_red}密码不能为空。${c_end}"
+#		continue
+#	else #[ "${mysql_pwd}" != "None" ];then
+#		#read -p "`echo -e "please enter the password of mysql again: "`" mysql_pwd_rp
+#		read -p "`echo -e "请再次输入mysql密码： "`" mysql_pwd_rp
+#		if [ "${mysql_pwd}" != "${mysql_pwd_rp}" ];then
+#			echo -e "${c_red}2次输入的密码不匹配。${c_end}"
+#			continue
+#		else
+#			break
+#		fi
+
+		
+#	fi
+#done
+
+#获取argo版本号
+while true
+do
+        read -p "`echo -e "请输入argo版本号.默认[${c_yellow}4.1.17${c_end}] ："`" argo_ver
+        if [ "${argo_ver:=4.1.17}" == "None" ];then
+
+                echo -e "${c_red}argo版本号不能为空。${c_end}"
+                continue
+        else
+                break
+        fi
+done
+
+#argo_ver=4.1.17
+
+os_ver1=centos7
+#获取root用户密码
+while true
+do
+	#read -p "`echo -e "please enter the password of root: "`" root_pwd
+	read -p "`echo -e "请输入linux系统root用户的密码： "`" root_pwd
+	if [ "${root_pwd:-None}" == "None" ];then
+		#echo -e "${c_red}The password of root is not empty.${c_end}"
+		echo -e "${c_red}Root密码不能为空。${c_end}"
+		continue
+	else
+		#read -p "`echo -e "please enter the password of root again: "`" root_pwd_rp
+		read -p "`echo -e "请再次输入linux系统root密码："`" root_pwd_rp
+		if [ "${root_pwd}" != "${root_pwd_rp}" ];then
+			#echo -e "${c_red}The passwords entered twice do not match.${c_end}"
+			echo -e "${c_red}2次输入的密码不匹配。${c_end}"
+			continue
+		else
+			break
+		fi
+		
+	fi
+done
+
+
+#获取集群名称
+while true
+do
+	#read -p "`echo -e "please enter the clustername: default [${c_yellow}platformName${c_end}]: "`" cluster_name
+	read -p "`echo -e "请输入集群名称，默认 [${c_yellow}platformName${c_end}]: "`" cluster_name
+	if [ "${cluster_name:=platformName}" == "None" ];then
+		#echo -e "${c_red}The cluster name can not be None.${c_end}"
+		echo -e "${c_red}集群名称不能为空。${c_end}"
+		continue
+	else
+		break
+	fi
+done
+
+#获取内存
+os_mem=`free -m | egrep Mem | awk '{printf("%.0f\n",$2/1024)}'`
+if [ ${os_mem} -lt 31 ];then
+	echo -e "${c_red}物理内存不能低于32G。${c_end}"
+	exit 96
+elif [ ${os_mem} -eq 31 ];then
+	os_mem=$(($os_mem+1))
+elif [ ${os_mem} -eq 63 ];then
+	os_mem=$(($os_mem+1))
+elif [ ${os_mem} -eq 127 ];then
+	os_mem=$(($os_mem+1))
+fi
+
+while true
+do
+	read -p "`echo -e "请输入系统物理内存，只能为32/64/128,当前为 [${c_yellow}${os_mem}(G)${c_end}]: "`" os_mem
+	
+	if [ "${os_mem:-None}" == "None" ];then
+		os_mem=`free -m | egrep Mem | awk '{printf("%.0f\n",$2/1024)}'`
+		if [ ${os_mem} -lt 31 ];then
+			echo -e "${c_red}物理内存不能低于32G。${c_end}"
+			continue
+		elif [ ${os_mem} -eq 31 ];then
+			os_mem=$(($os_mem+1))
+			break
+		elif [ ${os_mem} -eq 63 ];then
+			os_mem=$(($os_mem+1))
+			break
+		elif [ ${os_mem} -eq 127 ];then
+			os_mem=$(($os_mem+1))
+			break
+		fi
+	elif [ $os_mem -ne 32 -a $os_mem -ne 64 -a $os_mem -ne 128 ];then
+		echo -e "${c_red}node_memory只支持32，64，128，不支持其它值${c_end}"
+		continue
+	else
+		break
+	fi
+
+done
+
+#获取外网地址
+while true
+do
+        #read -p "`echo -e "please enter the name of Ethernet，default [${c_yellow}eth0${c_end}]: "`" eth
+        read -p "`echo -e "请输入外网IP: "`" IP_out
+        [ "${IP_out:-None}" == "None" ]&& echo -e "${c_red}IP不能为空，请输入正确的IP地址。${c_end}"&& continue
+        if [ -n "$(echo ${IP_out} | sed 's/[0-9]//g' | sed 's/.//g')" ];then
+                echo -e '${c_red}请输入正确的IP地址，否则无法初始化数据${c_end}'
+        continue
+        else
+                break
+        fi
+done
+
+
+#初始化安装
+echo -e "${c_yellow}安装大约需要30-50分钟左右，请您喝杯茶耐心等待。${c_end}"
+init_ext4
+
+#离线安装
+if [ ""$argo_action == "install" ];then
+    
+    export mysql_root_password=$mysql_pwd
+    export targetVersion=$argo_ver
+    export osType=$os_ver1
+    export install_user="root"
+    export install_user_password=$root_pwd
+    export cluster_name=$cluster_name
+    export node_memory=$os_mem
     repo_url=`grep repo_url config.properties`
     repo_url=${repo_url##*=}
     export repo_url
 
-    if [ ""$repo_url == ""  ];then
-        echo "请先配置config.properties文件中的源地址"
-        exit
-    fi
-
-    if [ $node_memory -ne 32 -a $node_memory -ne 64 -a $node_memory -ne 128 ];then
-        echo "node_memory只支持32，64，128，不支持其它值"
-        exit
+    #if [ $node_memory -ne 32 -a $node_memory -ne 64 -a $node_memory -ne 128 ];then
+    #    echo "node_memory只支持32，64，128，不支持其它值"
+    #    exit
     fi
 
     if echo "$cluster_name" | grep -q '^[a-zA-Z0-9]\+$'; then
@@ -236,73 +562,32 @@ if [ ""$action == "install" ];then
     fi
 
 
-    echo "检查是否已经安装了方舟..."
-    set +e
-    hadoop version
-    if [ $?"" -eq 0 ];then
-        echo "检查到您已经安装了方舟或大数据平台hadoop相关的服务，如果您已经安装了方舟，请使用upgrade命令升级到你想要的版本，如果没有安装方舟，请你更换一台没有安装过任何大数据组件的机器！"
-        exit 1
-    fi
     install
 
-elif [ ""$action == "upgrade" ];then
+    if [ ""$argo_action == "upgrade" ];then
     echo "暂不支持！"
     exit 1
-
-
-#    echo "检查是否已经安装了方舟..."
-#    CHECK01=`netstat -anlupt |grep '0.0.0.0:8080' |grep -v grep |wc -l` &> /dev/null
-#    if [ $CHECK01 -ne 1 ];then
-#        echo "您还没有安装过方舟，请先使用install命令安装方舟！"
-#        exit 1
-#    else
-#        echo "您已经安装了方舟，检查您的版本..."
-#        if [ -f /var/lib/ambari-server/resources/common-services/ARK_STREAMING/0.3.3/package/files/soft_version ];then
-#            currentVersion=`cat /var/lib/ambari-server/resources/common-services/ARK_STREAMING/0.3.3/package/files/soft_version`
-#            vltV=`vlt $currentVersion $targetVersion`
-#            if [ $vltV -eq 0 ];then
-#                echo "目标版本 $targetVersion 比当前版本 $currentVersion 小，无法升级！"
-#                exit 1
-#            fi
-
-#        else
-#            echo "您方舟的版本小于4.1.1.1，无法自动检查版本号，您可以通过方舟产品界面查看您的版本号，请确保您要升级到的目标版本 $targetVersion 大于您当前的版本号，不然升级会出错!"
-#        fi
-#    fi
-#
-#    read -p "是否继续 [y/n]: " choi
-#
-#    if [ $choi = y ] || [ $choi = Y ] ;then
-#        upgrade
-#    else
-#        echo "放丢升级！"
-#        exit 0
-#    fi
-
-fi
-
-
-## 字符串$1 小于 字符串$2
-vlt(){
-    if [ $# -lt 2  ] ;then
-            echo "参数错误"
-            return 1
     fi
 
-    [ $1 = $2 ] && return 1
+##导入license
+echo -e "${c_yellow}开始导入License,请耐心等待${c_end}"
+su - streaming -c "/opt/soft/streaming/bin/init_license_info.sh 1 495D220F07341C03B1FC7CB4F25455227B29990C9B7511C26FEE4C76D72E1D14477CC6AD54741B8414DE9BF2B787351FA2E2F4FC9DF24F19FBDD4395BB2CC0A645FC2E9749DEA34A09FB58378D758E0A9903E2642F10FC464F5AF8D7A6AC41B31065A6D0CF2EE9FD1B047C5B40B24C76848C3568C3ACE24E3C48C5796E7CC585D4587CA5D4F3FC17F6C45C71426E4867DDA80A10D26E79E95DA2437DC72A428193B728B51A9D77914C7C5437C6CFD1B3"
+su - streaming -c "/opt/soft/streaming/bin/update_enterprise_code.sh wByeDrLc 1"
 
-    litter=$(echo -e "$1\n$2" | sort | head -n1)
+##初始化数据
+echo -e "${c_yellow}开始初始化数据,请耐心等待${c_end}"
+su - streaming -c "/opt/soft/streaming/bin/init_data_entrance_url.sh http://${IP_out}:8089"
 
-    if [ $litter = $1 ] ;then
-            return 0
-    else
-            return 1
-    fi
-}
+echo -e "${c_yellow}安装nmon工具${c_end}"
+#安装nmon工具
+#yum -y install  nmon
 
+echo -e "${c_yellow}安装全部完成，感谢耐心等待。${c_end}"
 
+echo -e "${c_yellow}恭喜您，安装成功！${c_end}"
+echo -e "${c_yellow}方舟后台地址 http://${IP_out}:4005 账号admin 密码 111111${c_end}"
+echo -e "${c_yellow}ambari管理地址 http://${IP_out}:8080 账号 admin 密码 admin${c_end}"
+echo -e "${c_yellow}sdk上报地址 http://${IP_out}:8089${c_end}"
 
-
-
-
+echo -e "${c_yellow}使用方法请参考官方说明。${c_end}"
 
