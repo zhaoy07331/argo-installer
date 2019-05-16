@@ -585,7 +585,7 @@ echo -e "${c_yellow}安装nmon工具${c_end}"
 echo -e "${c_yellow}安装全部完成，感谢耐心等待。${c_end}"
 
 echo -e "${c_yellow}恭喜您，安装成功！${c_end}"
-echo -e "${c_yellow}方舟后台地址 http://${IP_out}:4005 账号admin 密码 111111${c_end}"
+echo -e "${c_yellow}方舟访问地址 http://${IP_out}:4005 账号admin 密码 111111${c_end}"
 echo -e "${c_yellow}ambari管理地址 http://${IP_out}:8080 账号 admin 密码 admin${c_end}"
 echo -e "${c_yellow}sdk上报地址 http://${IP_out}:8089${c_end}"
 
