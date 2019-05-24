@@ -475,11 +475,15 @@ do
 	fi
 done
 
-#获取内存
 os_mem=`free -m | egrep Mem | awk '{printf("%.0f\n",$2/1024)}'`
-if [ ${os_mem} -lt 31 ];then
-	echo -e "${c_red}物理内存不能低于32G。${c_end}"
+if [ ${os_mem} -lt 7 ];then
+	echo -e "${c_red}物理内存不能低于8G。${c_end}"
 	exit 96
+
+elif [ ${os_mem} -eq 7 ];then
+        os_mem=$(($os_mem+1))
+elif [ ${os_mem} -eq 15 ];then
+        os_mem=$(($os_mem+1))
 elif [ ${os_mem} -eq 31 ];then
 	os_mem=$(($os_mem+1))
 elif [ ${os_mem} -eq 63 ];then
@@ -490,13 +494,22 @@ fi
 
 while true
 do
-	read -p "`echo -e "请输入系统物理内存，只能为32/64/128,当前为 [${c_yellow}${os_mem}(G)${c_end}]: "`" os_mem
-	
+	read -p "`echo -e "请输入系统物理内存，只能为8/16/32/64/128,当前为 [${c_yellow}${os_mem}(G)${c_end}]: "`" os_mem
+
 	if [ "${os_mem:-None}" == "None" ];then
 		os_mem=`free -m | egrep Mem | awk '{printf("%.0f\n",$2/1024)}'`
-		if [ ${os_mem} -lt 31 ];then
-			echo -e "${c_red}物理内存不能低于32G。${c_end}"
+		if [ ${os_mem} -lt 7 ];then
+			echo -e "${c_red}物理内存不能低于8G。${c_end}"
 			continue
+
+                elif [ ${os_mem} -eq 7 ];then
+                        os_mem=$(($os_mem+1))
+                        break
+
+                elif [ ${os_mem} -eq 15 ];then
+                        os_mem=$(($os_mem+1))
+                        break
+
 		elif [ ${os_mem} -eq 31 ];then
 			os_mem=$(($os_mem+1))
 			break
@@ -507,8 +520,8 @@ do
 			os_mem=$(($os_mem+1))
 			break
 		fi
-	elif [ $os_mem -ne 32 -a $os_mem -ne 64 -a $os_mem -ne 128 ];then
-		echo -e "${c_red}node_memory只支持32，64，128，不支持其它值${c_end}"
+	elif [ $os_mem -ne 8 -a $os_mem -ne 16 -a  $os_mem -ne 32 -a $os_mem -ne 64 -a $os_mem -ne 128 ];then
+		echo -e "${c_red}node_memory只支持8 , 16 , 32 , 64 , 128 ,不支持其它值${c_end}"
 		continue
 	else
 		break
@@ -549,45 +562,55 @@ if [ ""$argo_action == "install" ];then
     repo_url=${repo_url##*=}
     export repo_url
 
-    #if [ $node_memory -ne 32 -a $node_memory -ne 64 -a $node_memory -ne 128 ];then
-    #    echo "node_memory只支持32，64，128，不支持其它值"
-    #    exit
-    fi
-
     if echo "$cluster_name" | grep -q '^[a-zA-Z0-9]\+$'; then
-            echo "OK"
+        echo "OK"
     else
-            echo "cluster_name 参数的值 $cluster_name 非法，只能是字母和数字"
-            exit 1
+        echo "cluster_name 参数的值 $cluster_name 非法，只能是字母和数字"
+        exit 1
     fi
 
+
+    echo "检查是否已经安装了方舟..."
+    set +e
+    hadoop version
+    if [ $?"" -eq 0 ];then
+        echo "检查到您已经安装了方舟或大数据平台hadoop相关的服务，如果您已经安装了方舟，请使用upgrade命令升级到你想要的版本，如果没有安装方舟，请你更换一台没有安装过任何大数据组件的机器！"
+        exit 1
+    fi
+
+    #初始化安装
+    echo -e "${c_yellow}安装大约需要30-50分钟左右，请您喝杯茶耐心等待。${c_end}"
+
+    sleep 5
+
+    init_ext4
 
     install
 
-    if [ ""$argo_action == "upgrade" ];then
+    ##导入license
+    echo -e "${c_yellow}开始导入License,请耐心等待${c_end}"
+    su - streaming -c "/opt/soft/streaming/bin/init_license_info.sh 1 495D220F07341C03B1FC7CB4F25455227B29990C9B7511C26FEE4C76D72E1D14477CC6AD54741B8414DE9BF2B787351FA2E2F4FC9DF24F19FBDD4395BB2CC0A645FC2E9749DEA34A09FB58378D758E0A9903E2642F10FC464F5AF8D7A6AC41B31065A6D0CF2EE9FD1B047C5B40B24C76848C3568C3ACE24E3C48C5796E7CC585D4587CA5D4F3FC17F6C45C71426E4867DDA80A10D26E79E95DA2437DC72A428193B728B51A9D77914C7C5437C6CFD1B3"
+    su - streaming -c "/opt/soft/streaming/bin/update_enterprise_code.sh wByeDrLc 1"
+
+    ##初始化数据
+    echo -e "${c_yellow}开始初始化数据,请耐心等待${c_end}"
+    su - streaming -c "/opt/soft/streaming/bin/init_data_entrance_url.sh http://${IP_out}:8089"
+
+    echo -e "${c_yellow}安装nmon工具${c_end}"
+    #安装nmon工具
+    #yum -y install  nmon
+
+    echo -e "${c_yellow}安装全部完成，感谢耐心等待。${c_end}"
+
+    echo -e "${c_yellow}恭喜您，安装成功！${c_end}"
+    echo -e "${c_yellow}方舟访问地址 http://${IP_out}:4005 账号admin 密码 111111${c_end}"
+    echo -e "${c_yellow}ambari管理地址 http://${IP_out}:8080 账号 admin 密码 admin${c_end}"
+    echo -e "${c_yellow}sdk上报地址 http://${IP_out}:8089${c_end}"
+
+    echo -e "${c_yellow}使用方法请参考官方说明。${c_end}"
+
+
+elif [ ""$argo_action == "upgrade" ];then
     echo "暂不支持！"
     exit 1
-    fi
-
-##导入license
-echo -e "${c_yellow}开始导入License,请耐心等待${c_end}"
-su - streaming -c "/opt/soft/streaming/bin/init_license_info.sh 1 495D220F07341C03B1FC7CB4F25455227B29990C9B7511C26FEE4C76D72E1D14477CC6AD54741B8414DE9BF2B787351FA2E2F4FC9DF24F19FBDD4395BB2CC0A645FC2E9749DEA34A09FB58378D758E0A9903E2642F10FC464F5AF8D7A6AC41B31065A6D0CF2EE9FD1B047C5B40B24C76848C3568C3ACE24E3C48C5796E7CC585D4587CA5D4F3FC17F6C45C71426E4867DDA80A10D26E79E95DA2437DC72A428193B728B51A9D77914C7C5437C6CFD1B3"
-su - streaming -c "/opt/soft/streaming/bin/update_enterprise_code.sh wByeDrLc 1"
-
-##初始化数据
-echo -e "${c_yellow}开始初始化数据,请耐心等待${c_end}"
-su - streaming -c "/opt/soft/streaming/bin/init_data_entrance_url.sh http://${IP_out}:8089"
-
-echo -e "${c_yellow}安装nmon工具${c_end}"
-#安装nmon工具
-#yum -y install  nmon
-
-echo -e "${c_yellow}安装全部完成，感谢耐心等待。${c_end}"
-
-echo -e "${c_yellow}恭喜您，安装成功！${c_end}"
-echo -e "${c_yellow}方舟访问地址 http://${IP_out}:4005 账号admin 密码 111111${c_end}"
-echo -e "${c_yellow}ambari管理地址 http://${IP_out}:8080 账号 admin 密码 admin${c_end}"
-echo -e "${c_yellow}sdk上报地址 http://${IP_out}:8089${c_end}"
-
-echo -e "${c_yellow}使用方法请参考官方说明。${c_end}"
-
+fi
