@@ -25,7 +25,8 @@
 ## 系统要求
 请尽量不要让您的公网ip直接对外，不然会有中毒的风险。您可以使用内网ip通过网关的方式来访问外网。
 
-方舟Argo安装部署手册的主要目的是指导使用该系统的用户方便快捷的安装系统和配置。
+方舟
+安装部署手册的主要目的是指导使用该系统的用户方便快捷的安装系统和配置。
 如果您已经下载好了安装包，请参考[离线安装](#offline_install)。
 
 ## 网络要求
@@ -85,7 +86,11 @@
         ```
 
 * <span id="offline_install">离线安装</span> _**在线自动安装，跳过该步骤**_
-    1. argo-repo-url地址下载安装包，或者通过百度网盘下载
+    1. argo-repo-url地址下载安装包
+    ```
+    argo-repo-url=http://ark_install.analysys.cn/
+    ```
+    或者通过百度网盘下载
     ![](imgs/7.png)
     
     2. 将下载的analysys_installer_base_centos7.tar.gz ， analysys_installer_base_centos7.tar.gz.md5 ， ark_centos7_4.1.17.tar.gz ， ark_centos7_4.1.17.tar.gz.md5 4个文件放到服务器/opt/soft目录下。
