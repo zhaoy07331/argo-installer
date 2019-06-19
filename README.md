@@ -149,7 +149,7 @@ vi /etc/hosts
 ```
 添加内容如下
 ```
-${该服务器的内网ip} ark1.analysys.xyz ark1 
+ip（注：这里填写该服务器的内网ip地址） ark1.analysys.xyz ark1 
 ```
 注意，目前只支持 ark1.analysys.xyz，这个/etc/hosts文件也必须这么写
 
