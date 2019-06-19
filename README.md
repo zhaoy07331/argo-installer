@@ -312,5 +312,6 @@ su - streaming
 # 社群
 
 希望我们的努力可以解放更多人的生产力，祝你使用顺利！
+欢迎加入
 
 官方论坛 https://geek.analysys.cn
