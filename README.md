@@ -149,7 +149,7 @@ vi /etc/hosts
 ```
 添加内容如下
 ```
-${该服务器的内网ip} ark1.analysys.xyz ark1 
+ip ark1.analysys.xyz ark1（注：这里的ip填写该服务器的内网ip地址）
 ```
 注意，目前只支持 ark1.analysys.xyz，这个/etc/hosts文件也必须这么写
 
@@ -228,7 +228,7 @@ ${该服务器的内网ip} ark1.analysys.xyz ark1
 
 ### 2.2安装完成后，检查未成功启动的服务：
 
-浏览器输入 http://${该服务器的内网ip}:8080
+浏览器输入 http://ip:8080（注：这里的ip填写该服务器的内网ip地址）
 
 账密为 admin/admin
 
@@ -254,10 +254,10 @@ sudo su - streaming
 
 ## 4.初始化收数地址
 
-SDK往方舟里上报数据，需要知道方舟收数的地址。默认情况下，可以使用 http://${该服务器的外网ip}:8089 来上报数据，我们将该地址导入到方舟中。
+SDK往方舟里上报数据，需要知道方舟收数的地址。默认情况下，可以使用 http://ip:8089（注：这里的ip填写该服务器的外网ip地址） 来上报数据，我们将该地址导入到方舟中。
 ```bash
 sudo su - streaming
-/opt/soft/streaming/bin/init_data_entrance_url.sh http://${该服务器的外网ip}:8089
+/opt/soft/streaming/bin/init_data_entrance_url.sh http://ip:8089（注：这里的ip填写该服务器的外网ip地址）
 ```
 但是IOS的SDK上报数据需要https，这种情况下，您需要单独部署一套nginx的服务器，并配置域名访问。具体请参考文档：《部署前置nginx》
 
