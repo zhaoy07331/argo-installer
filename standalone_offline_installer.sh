@@ -100,7 +100,7 @@ function install()
     tar -zxf analysys_installer_base_centos7.tar.gz
     echo "tar -zxf ark_${osType}_$targetVersion.tar.gz ..."
     tar -zxf ark_${osType}_$targetVersion.tar.gz
-    cd analysys_installer
+    
 
 
     echo "******************************************************************************"
@@ -111,7 +111,7 @@ function install()
     echo "******************************************************************************"
     echo -e "\033[42;34m ==============开始自动修改安装参数......================= \033[0m"
 
-
+    cd analysys_installer
 
     #修改ship.name参数
     blueprint="1node-${node_memory}g-ark-hdp2.6.1.0"
