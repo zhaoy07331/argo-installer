@@ -431,6 +431,10 @@ if [ ""$argo_action == "install" ];then
     echo -e "${c_yellow}开始初始化数据,请耐心等待${c_end}"
     su - streaming -c "/opt/soft/streaming/bin/init_data_entrance_url.sh http://${IP_out}:8089"
 
+    ##初始化指标监控地址
+    echo -e "${c_yellow}开始初始化指标监控地址,请耐心等待${c_end}"
+    su - streaming -c "/opt/soft/streaming/bin/init_monitor_list_url.sh ${IP_out}/view/sign/index.html?referrer=${IP_out}%2Fproject-management%2Fmonitoring%3FmonitorTab%3D1%26projectType%3D{{appkey}}#/"
+
     echo -e "${c_yellow}安装nmon工具${c_end}"
     #安装nmon工具
     #yum -y install  nmon
