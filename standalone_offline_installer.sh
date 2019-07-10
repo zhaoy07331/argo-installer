@@ -32,13 +32,13 @@ function install()
     if [ ""$osType == "centos7" ];then
         baseUrl="$repo_url/analysys_installer_base_centos7.tar.gz"
         basemd5Url="$repo_url/analysys_installer_base_centos7.tar.gz.md5"
-        arkUrl="$repo_url/ark_$targetVersion/ark_centos7_$targetVersion.tar.gz"
-        arkmd5Url="$repo_url/ark_$targetVersion/ark_centos7_$targetVersion.tar.gz.md5"
+        arkUrl="$repo_url/argo_$targetVersion/argo_centos7_$targetVersion.tar.gz"
+        arkmd5Url="$repo_url/argo_$targetVersion/argo_centos7_$targetVersion.tar.gz.md5"
     elif [ ""$osType == "centos6" ];then
         baseUrl="$repo_url/analysys_installer_base_centos6.tar.gz"
         basemd5Url="$repo_url/analysys_installer_base_centos6.tar.gz.md5"
-        arkUrl="$repo_url/ark_$targetVersion/ark_centos6_$targetVersion.tar.gz"
-        arkmd5Url="$repo_url/ark_$targetVersion/ark_centos6_$targetVersion.tar.gz.md5"
+        arkUrl="$repo_url/argo_$targetVersion/argo_centos6_$targetVersion.tar.gz"
+        arkmd5Url="$repo_url/argo_$targetVersion/argo_centos6_$targetVersion.tar.gz.md5"
     else
         echo "不支持的操作系统版本"
         exit 1
@@ -86,17 +86,17 @@ function install()
     echo "******************************************************************************"
     echo -e "\033[42;34m ==============开始检查$targetVersion安装包......================= \033[0m"
 
-    if [ -f /opt/soft/ark_${osType}_$targetVersion.tar.gz ];then
-        echo "已存在ark_${osType}_$targetVersion.tar.gz安装包，检查文件完整性..."
+    if [ -f /opt/soft/argo_${osType}_$targetVersion.tar.gz ];then
+        echo "已存在argo_${osType}_$targetVersion.tar.gz安装包，检查文件完整性..."
         echo " "
         echo " "
 
-        if [ -f /opt/soft/ark_${osType}_$targetVersion.tar.gz.md5 ];then
+        if [ -f /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5 ];then
             echo "已存在.md5文件，开始检查..."
             set +e
-            checksum=`md5sum  -c   ark_${osType}_$targetVersion.tar.gz.md5`
+            checksum=`md5sum  -c   argo_${osType}_$targetVersion.tar.gz.md5`
             set -e
-            if [[ "$checksum" == ark_${osType}_$targetVersion.tar.gz:* ]];then
+            if [[ "$checksum" == argo_${osType}_$targetVersion.tar.gz:* ]];then
                 echo "文件完整，跳过下载"
                 echo " "
                 echo " "
@@ -105,12 +105,12 @@ function install()
                 exit 1
             fi
         else
-            echo "缺少md5检验文件ark_${osType}_$targetVersion.tar.gz.md5，请下载并放到/opt/soft/目录下。"
+            echo "缺少md5检验文件argo_${osType}_$targetVersion.tar.gz.md5，请下载并放到/opt/soft/目录下。"
             exit 1
         fi
 
     else
-        echo "没有检查到安装包，请将安装包ark_${osType}_$targetVersion.tar.gz和其对应的ark_${osType}_$targetVersion.tar.gz.md5文件一起放到/opt/soft/目录下"
+        echo "没有检查到安装包，请将安装包argo_${osType}_$targetVersion.tar.gz和其对应的argo_${osType}_$targetVersion.tar.gz.md5文件一起放到/opt/soft/目录下"
         exit 1
 
 
@@ -122,8 +122,8 @@ function install()
     cd /opt/soft
     echo "tar -zxf analysys_installer_base_centos7.tar.gz ..."
     tar -zxf analysys_installer_base_centos7.tar.gz
-    echo "tar -zxf ark_${osType}_$targetVersion.tar.gz ..."
-    tar -zxf ark_${osType}_$targetVersion.tar.gz
+    echo "tar -zxf argo_${osType}_$targetVersion.tar.gz ..."
+    tar -zxf argo_${osType}_$targetVersion.tar.gz
     cd analysys_installer
 
 
@@ -255,15 +255,15 @@ done
 #done
 
 #获取argo版本号
-argo_ver=`ls ark_*.tar.gz | awk -F '_' '{print $3}' | awk -F '.tar' '{print $1}'`
+argo_ver=`ls argo_*.tar.gz | awk -F '_' '{print $3}' | awk -F '.tar' '{print $1}'`
 #read -p "`echo -e "please enter the version of argo: default [${c_yellow}${argo_ver}${c_end}]: "`" argo_ver
 read -p "`echo -e "请输入argo的版本号，默认 [${c_yellow}${argo_ver}${c_end}]: "`" argo_ver
 if [ "${argo_ver:-None}" == "None" ];then
-	argo_ver=`ls ark_*.tar.gz | awk -F '_' '{print $3}' | awk -F '.tar' '{print $1}'`
+	argo_ver=`ls argo_*.tar.gz | awk -F '_' '{print $3}' | awk -F '.tar' '{print $1}'`
 fi
 
 #判断os系统的版本信息是否适配当前的argo软件
-os_ver1=`ls ark_*.tar.gz | awk -F '_' '{print $2}'`
+os_ver1=`ls argo_*.tar.gz | awk -F '_' '{print $2}'`
 os_ver2=`cat /etc/redhat-release | awk '{print $1}' | tr [A-Z] [a-z]``cat /etc/redhat-release | egrep -o "[0-9]" | head -n 1`
 if [ "${os_ver1}" != "${os_ver2}" ];then
 	#echo -e "${c_red}The system version does not match the Argo software version.${c_end}"

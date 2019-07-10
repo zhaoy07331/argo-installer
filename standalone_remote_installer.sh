@@ -32,13 +32,13 @@ function install()
     if [ ""$osType == "centos7" ];then
         baseUrl="$repo_url/analysys_installer_base_centos7.tar.gz"
         basemd5Url="$repo_url/analysys_installer_base_centos7.tar.gz.md5"
-        arkUrl="$repo_url/ark_$targetVersion/ark_centos7_$targetVersion.tar.gz"
-        arkmd5Url="$repo_url/ark_$targetVersion/ark_centos7_$targetVersion.tar.gz.md5"
+        arkUrl="$repo_url/argo_$targetVersion/argo_centos7_$targetVersion.tar.gz"
+        arkmd5Url="$repo_url/argo_$targetVersion/argo_centos7_$targetVersion.tar.gz.md5"
     elif [ ""$osType == "centos6" ];then
         baseUrl="$repo_url/analysys_installer_base_centos6.tar.gz"
         basemd5Url="$repo_url/analysys_installer_base_centos6.tar.gz.md5"
-        arkUrl="$repo_url/ark_$targetVersion/ark_centos6_$targetVersion.tar.gz"
-        arkmd5Url="$repo_url/ark_$targetVersion/ark_centos6_$targetVersion.tar.gz.md5"
+        arkUrl="$repo_url/argo_$targetVersion/argo_centos6_$targetVersion.tar.gz"
+        arkmd5Url="$repo_url/argo_$targetVersion/argo_centos6_$targetVersion.tar.gz.md5"
     else
         echo "不支持的操作系统版本"
         exit 1
@@ -115,18 +115,18 @@ function install()
     echo "******************************************************************************"
     echo -e "\033[42;34m ==============开始下载$targetVersion安装包......================= \033[0m"
 
-    if [ -f /opt/soft/ark_${osType}_$targetVersion.tar.gz ];then
-        echo "已存在ark_${osType}_$targetVersion.tar.gz安装包，检查文件完整性..."
+    if [ -f /opt/soft/argo_${osType}_$targetVersion.tar.gz ];then
+        echo "已存在argo_${osType}_$targetVersion.tar.gz安装包，检查文件完整性..."
         echo " "
         echo " "
-        if [ -f /opt/soft/ark_${osType}_$targetVersion.tar.gz.md5 ];then
-            rm -rf /opt/soft/ark_${osType}_$targetVersion.tar.gz.md5
+        if [ -f /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5 ];then
+            rm -rf /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5
         fi
-        wget -c -O  /opt/soft/ark_${osType}_$targetVersion.tar.gz.md5 $arkmd5Url
+        wget -c -O  /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5 $arkmd5Url
         set +e
-        checksum=`md5sum  -c   ark_${osType}_$targetVersion.tar.gz.md5`
+        checksum=`md5sum  -c   argo_${osType}_$targetVersion.tar.gz.md5`
         set -e
-        if [[ "$checksum" == ark_${osType}_$targetVersion.tar.gz:* ]];then
+        if [[ "$checksum" == argo_${osType}_$targetVersion.tar.gz:* ]];then
             echo "文件完整，跳过下载"
             echo " "
             echo " "
@@ -134,14 +134,14 @@ function install()
             echo "文件不完整，重新下载..."
             echo " "
             echo " "
-            rm -rf /opt/soft/ark_${osType}_$targetVersion.tar.gz
-            wget -c -O  /opt/soft/ark_${osType}_$targetVersion.tar.gz $arkUrl
-            rm -rf /opt/soft/ark_${osType}_$targetVersion.tar.gz.md5
-            wget -c -O  /opt/soft/ark_${osType}_$targetVersion.tar.gz.md5 $arkmd5Url
+            rm -rf /opt/soft/argo_${osType}_$targetVersion.tar.gz
+            wget -c -O  /opt/soft/argo_${osType}_$targetVersion.tar.gz $arkUrl
+            rm -rf /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5
+            wget -c -O  /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5 $arkmd5Url
             set +e
-            checksum=`md5sum -c ark_${osType}_$targetVersion.tar.gz.md5`
+            checksum=`md5sum -c argo_${osType}_$targetVersion.tar.gz.md5`
             set -e
-            if [[ "$checksum" == ark_${osType}_$targetVersion.tar.gz:* ]];then
+            if [[ "$checksum" == argo_${osType}_$targetVersion.tar.gz:* ]];then
                 echo "文件完整，下载成功"
                 echo " "
                 echo " "
@@ -151,17 +151,17 @@ function install()
             fi
         fi
     else
-        wget -c -O  /opt/soft/ark_${osType}_$targetVersion.tar.gz $arkUrl
+        wget -c -O  /opt/soft/argo_${osType}_$targetVersion.tar.gz $arkUrl
 
-        if [ -f /opt/soft/ark_${osType}_$targetVersion.tar.gz.md5 ];then
-            rm -rf /opt/soft/ark_${osType}_$targetVersion.tar.gz.md5
+        if [ -f /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5 ];then
+            rm -rf /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5
         fi
 
-        wget -c -O  /opt/soft/ark_${osType}_$targetVersion.tar.gz.md5 $arkmd5Url
+        wget -c -O  /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5 $arkmd5Url
         set +e
-        checksum=`md5sum -c ark_${osType}_$targetVersion.tar.gz.md5`
+        checksum=`md5sum -c argo_${osType}_$targetVersion.tar.gz.md5`
         set -e
-        if [[ "$checksum" == ark_${osType}_$targetVersion.tar.gz:* ]];then
+        if [[ "$checksum" == argo_${osType}_$targetVersion.tar.gz:* ]];then
             echo "文件完整，下载成功"
             echo " "
             echo " "
@@ -178,8 +178,8 @@ function install()
     cd /opt/soft
     echo "tar -zxf analysys_installer_base_centos7.tar.gz ..."
     tar -zxf analysys_installer_base_centos7.tar.gz
-    echo "tar -zxf ark_${osType}_$targetVersion.tar.gz ..."
-    tar -zxf ark_${osType}_$targetVersion.tar.gz
+    echo "tar -zxf argo_${osType}_$targetVersion.tar.gz ..."
+    tar -zxf argo_${osType}_$targetVersion.tar.gz
     cd analysys_installer
 
 
