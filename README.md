@@ -178,6 +178,7 @@
 按上图中的1、2、3步骤操作完成，直到没有红色叹号的服务。另外需要注意的是，由于服务状态检查有一定的延时，所以在安装完成过几分钟后再进行该操作，操作完成后也需要观察一段时间再看结果。
 
 
+
 ## 2.3 初始化收数地址（可选操作，使用IOS SDK时需要）
 
 SDK往方舟里上报数据，需要知道方舟收数的地址。默认情况下，我们已经在安装脚本中将argo数据上报地址 http://${该服务器的外网ip}:8089 导入到了方舟argo中 。
@@ -215,6 +216,13 @@ http://ip:4005/
 ```
 admin/111111
 ```
+
+第一次进入argo系统需要激活license，请输入下面的信息
+
+```
+495D220F07341C03B1FC7CB4F25455227B29990C9B7511C26FEE4C76D72E1D14477CC6AD54741B8414DE9BF2B787351FA2E2F4FC9DF24F19FBDD4395BB2CC0A645FC2E9749DEA34A09FB58378D758E0A9903E2642F10FC464F5AF8D7A6AC41B31065A6D0CF2EE9FD1B047C5B40B24C76848C3568C3ACE24E3C48C5796E7CC585D4587CA5D4F3FC17F6C45C71426E4867DDA80A10D26E79E95DA2437DC72A428193B728B51A9D77914C7C5437C6CFD1B3
+```
+
 接下来，你为自己创建一个日常使用的[账号](https://ark.analysys.cn/docs/enterprise-basic-function-member.html)，并创建一个[项目](https://ark.analysys.cn/docs/enterprise-basic-function-project-management.html)。
 
 ### 3.2 数据接入
