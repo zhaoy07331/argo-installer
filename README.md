@@ -77,11 +77,11 @@
         ```
         yum install wget unzip -y
         cd /tmp
-        wget https://github.com/analysys/argo-installer/archive/master.zip
-        unzip master.zip
-        cp argo-installer-master/config.properties /opt/soft/
-        cp argo-installer-master/standalone_remote_installer.sh /opt/soft/
-        cp argo-installer-master/init_ext4.sh /opt/soft/
+        wget https://github.com/analysys/argo-installer/archive/4.3.1.zip
+        unzip 4.3.1.zip
+        cp argo-installer-4.3.1/config.properties /opt/soft/
+        cp argo-installer-4.3.1/standalone_remote_installer.sh /opt/soft/
+        cp argo-installer-4.3.1/init_ext4.sh /opt/soft/
         ```
 
 * <span id="offline_install">离线安装</span> （_**在线自动安装，跳过该步骤**_）
