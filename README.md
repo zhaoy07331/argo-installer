@@ -90,7 +90,8 @@
     
     2. 将下载的analysys_installer_base_centos7.tar.gz ， analysys_installer_base_centos7.tar.gz.md5 ， argo_centos7_4.3.1.tar.gz ， argo_centos7_4.3.1.tar.gz.md5 4个文件放到服务器/opt/soft目录下。
     
-    3. 从https://github.com/analysys/argo-installer地址下载argo-installer项目,然后解压后将config.properties和standalone_offline_installer.sh , init_ext4.sh文件放到服务器/opt/soft目录下
+    3. 从https://github.com/analysys/argo-installer  
+    地址下载argo-installer项目对应的版本,然后解压后将config.properties和standalone_offline_installer.sh , init_ext4.sh文件放到服务器/opt/soft目录下
     
     4. **如果您通过windows机器下载脚本并上传到服务器上，过程中可能会导致shell脚本的文件格式变成dos，所以请先使用如下命令将shell脚本格式做个转换**
        
@@ -251,3 +252,4 @@ su - streaming
 希望我们的努力可以解放更多人的生产力，祝你使用顺利！
 
 官方论坛 https://geek.analysys.cn
+
