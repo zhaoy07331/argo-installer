@@ -88,7 +88,7 @@
     1. argo-repo-url地址下载安装包，或者通过百度网盘下载
     ![](imgs/7.png)
     
-    2. 将下载的analysys_installer_base_centos7.tar.gz ， analysys_installer_base_centos7.tar.gz.md5 ， ark_centos7_4.1.17.tar.gz ， ark_centos7_4.1.17.tar.gz.md5 4个文件放到服务器/opt/soft目录下。
+    2. 将下载的analysys_installer_base_centos7.tar.gz ， analysys_installer_base_centos7.tar.gz.md5 ， argo_centos7_4.3.1.tar.gz ， argo_centos7_4.3.1.tar.gz.md5 4个文件放到服务器/opt/soft目录下。
     
     3. 从https://github.com/analysys/argo-installer地址下载argo-installer项目,然后解压后将config.properties和standalone_offline_installer.sh , init_ext4.sh文件放到服务器/opt/soft目录下
     
