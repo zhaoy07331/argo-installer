@@ -149,8 +149,8 @@
     请输入您接下来的动作: install/upgrade. 默认[install]: 
     请输入mysql的密码.默认[Eguan@123] ：
     请输入argo的版本号，默认 [4.3.1]: 
-    请输入linux系统root用户的密码： Eguan)@)$
-    请再次输入linux系统root密码：Eguan)@)$
+    请输入linux系统root用户的密码： rrFG37Ui987
+    请再次输入linux系统root密码：rrFG37Ui987
     请输入集群名称，默认 [platformName]: 
     请输入系统物理内存，只能为32/64/128,当前为 [64(G)]: 
     请输入外网IP: 
