@@ -1,38 +1,28 @@
+# 易观 Argo
 
-# 方舟Argo自动化安装文档
+我们最初推出 Argo 是希望有一种全新的产品体验——让大家在使用到商业级产品能力的时尽量不用去考虑成本。虽然现在难以做到完全开源，但我们也会努力将商业级的产品通过社区带给更多人。
 
-# 目录
+我们觉得数据驱动是一种基础能力，大家都应该更自由地使用。数据驱动在未来会有更广阔的应用场景，而目前在企业中的使用率还达不到普及。从长远来看，降低使用门槛的做法对提升普及率有积极意义。
 
-- [环境准备](#环境准备)
-  * [系统要求](#系统要求)
-  * [网络要求](#网络要求)
-  * [硬件要求](#硬件要求)
-  * [系统要求](#系统要求)
-  * [安装包说明](#安装包说明)
-- [开始安装](#开始安装)
-  * [准备工作](#准备工作)
-  * [配置/etc/hosts](#配置/etc/hosts)
-  * [开始安装](#开始安装)
-  * [导入License](#导入License)
-  * [初始化收数地址](#初始化收数地址)
-- [开始使用](#开始使用)
-  * [管理后台](#管理后台)
-  * [数据接入](#数据接入)
-- [社群](#社群)
+也希望能在很快的未来，我们会和更多的开发者和社区爱好者一起，带动更多的朋友一起来做这件有意义的事情。
 
-# 1. 环境准备
+- 最新版：[4.3.1](http://arkinstall.analysys.cn/)
 
-## 1.1 系统要求
+# 安装步骤
+
+## 1. 环境准备
+
+### 1.1 系统要求
 请尽量不要让您的公网ip直接对外，不然会有中毒的风险。您可以使用内网ip通过网关的方式来访问外网。
 
 方舟Argo安装部署手册的主要目的是指导使用该系统的用户方便快捷的安装系统和配置。
 如果您已经下载好了安装包，请参考[离线安装](#offline_install)。
 
-## 1.2 网络要求
+### 1.2 网络要求
 能连通外网
 
 
-## 1.3 硬件要求
+### 1.3 硬件要求
 * 体验环境
     * 4Core 8G内存 及以上
     * 系统盘:50G 
@@ -46,7 +36,7 @@
     * 系统盘:300G 
     * 数据盘:>500G磁盘，并且做RAID1或更高级别的配置。
 
-## 1.4 系统要求
+### 1.4 系统要求
 | 系统及其组件 | 系统要求                                        |
 | ------------ | :---------------------------------------------- |
 | 操作系统     | CentOS 7和 Redhat 7版本、强烈建议CentOS7.4      |
@@ -56,15 +46,15 @@
 | 系统编码     | UTF-8                                           |
 | 软件环境     | 不支持混合部署                                  |
 
-## 1.5 安装包说明
+### 1.5 安装包说明
 
 * standalone_remote_installer.sh  远程安装脚本
 * standalone_offline_installer.sh 本地安装脚本
 * init_ext4.sh 环境检查脚本，检查环境是否有问题
 
-# 2.开始安装
+## 2.开始安装
 
-## 2.1 准备工作
+### 2.1 准备工作
 
 以下操作以4.3.1版本为样例，有些操作中涉及到的文件需要根据您安装的具体的版本号来定
 
@@ -76,7 +66,7 @@
     ```
 
 * 在线安装
-    1. 从 https://github.com/analysys/argo-installer 地址下载argo-installer项目，解压后将config.properties和standalone_remote_installer.sh , init_ext4.sh放到/opt/soft目录下
+    1. 下载这里的 argo-installer 项目，解压后将config.properties和standalone_remote_installer.sh , init_ext4.sh放到/opt/soft目录下
     
         ```
         yum install wget unzip -y
@@ -89,15 +79,13 @@
         ```
 
 * <span id="offline_install">离线安装</span> （_**在线自动安装，跳过该步骤**_）
-    1. argo-repo-url地址下载安装包，或者通过百度网盘下载
-    ![](imgs/7.png)
+    1. 下载安装包(百度网盘或Http）
     
-    2. 将下载的analysys_installer_base_centos7.tar.gz ， analysys_installer_base_centos7.tar.gz.md5 ， argo_centos7_4.3.1.tar.gz ， argo_centos7_4.3.1.tar.gz.md5 4个文件放到服务器/opt/soft目录下。
+    2. 将 analysys_installer_base_centos7.tar.gz， analysys_installer_base_centos7.tar.gz.md5， argo_centos7_4.3.1.tar.gz，argo_centos7_4.3.1.tar.gz.md5 4个文件放到服务器/opt/soft目录下。
     
-    3. 从https://github.com/analysys/argo-installer  
-    地址下载argo-installer项目对应的版本,然后解压后将config.properties和standalone_offline_installer.sh , init_ext4.sh文件放到服务器/opt/soft目录下
+    3. 下载这里的 argo-installer 项目，然后解压后将 config.properties 和standalone_offline_installer.sh，init_ext4.sh 文件放到服务器 /opt/soft/ 目录下
     
-    4. **如果您通过windows机器下载脚本并上传到服务器上，过程中可能会导致shell脚本的文件格式变成dos，所以请先使用如下命令将shell脚本格式做个转换**
+    1. **如果您通过windows机器下载脚本并上传到服务器上，过程中可能会导致shell脚本的文件格式变成 .dos，所以请先使用如下命令将shell脚本格式做个转换**
        
        ```
        cd /opt/soft
@@ -121,9 +109,9 @@
     sudo sh init_ext4.sh
     ```
 
-## 2.2 开始安装
+### 2.2 开始安装
 
-### 2.2.1 安装
+#### 2.2.1 安装
 
 以下操作以4.3.1版本为样例
 1. 在线安装：配置服务器下载地址，修改/opt/soft/config.properties文件
@@ -172,7 +160,7 @@
     --------------------------------------初始化数据接收入口url成功-----------------------------------
     ```
 
-### 2.2.2 安装完成后，检查未成功启动的服务：
+#### 2.2.2 安装完成后，检查未成功启动的服务：
 
 浏览器输入 http://${该服务器的内网ip}:8080
 
@@ -184,7 +172,7 @@
 
 
 
-## 2.3 初始化收数地址（可选操作，使用IOS SDK时需要）
+### 2.3 初始化收数地址（可选操作，使用IOS SDK时需要）
 
 SDK往方舟里上报数据，需要知道方舟收数的地址。默认情况下，我们已经在安装脚本中将argo数据上报地址 http://${该服务器的外网ip}:8089 导入到了方舟argo中 。
 
@@ -198,9 +186,9 @@ sudo su - streaming
 ```
 
 
-## 2.4 开启故障自动恢复
+### 2.4 开启故障自动恢复
 
-### 开启自动恢复功能，开启后，异常挂掉的服务会自己恢复重启
+#### 开启自动恢复功能，开启后，异常挂掉的服务会自己恢复重启
 
 ![](imgs/3.png)
 然后:
@@ -222,22 +210,14 @@ http://ip:4005/
 admin/111111
 ```
 
+### 3.2 激活系统
+
 第一次进入argo系统需要激活license，请输入下面的信息
 
-```
-495D220F07341C03B1FC7CB4F25455227B29990C9B7511C26FEE4C76D72E1D14477CC6AD54741B8414DE9BF2B787351FA2E2F4FC9DF24F19FBDD4395BB2CC0A645FC2E9749DEA34A09FB58378D758E0A9903E2642F10FC464F5AF8D7A6AC41B31065A6D0CF2EE9FD1B047C5B40B24C76848C3568C3ACE24E3C48C5796E7CC585D4587CA5D4F3FC17F6C45C71426E4867DDA80A10D26E79E95DA2437DC72A428193B728B51A9D77914C7C5437C6CFD1B3
-```
+> 495D220F07341C03B1FC7CB4F25455227B29990C9B7511C26FEE4C76D72E1D14477CC6AD54741B8414DE9BF2B787351FA2E2F4FC9DF24F19FBDD4395BB2CC0A645FC2E9749DEA34A09FB58378D758E0A9903E2642F10FC464F5AF8D7A6AC41B31065A6D0CF2EE9FD1B047C5B40B24C76848C3568C3ACE24E3C48C5796E7CC585D4587CA5D4F3FC17F6C45C71426E4867DDA80A10D26E79E95DA2437DC72A428193B728B51A9D77914C7C5437C6CFD1B3
+
 
 接下来，你为自己创建一个日常使用的[账号](https://ark.analysys.cn/docs/enterprise-basic-function-member.html)，并创建一个[项目](https://ark.analysys.cn/docs/enterprise-basic-function-project-management.html)。
-
-### 3.2 数据接入
-
-完成了上述步骤就正式进入了易观方舟Argo的探索之旅，下面是一些快速开始的文档：
-
-- [接入前准备](https://ark.analysys.cn/docs/integration-prepare.html)
-- [SDK指南](https://ark.analysys.cn/docs/sdk.html)
-- [功能使用说明](https://ark.analysys.cn/docs/function.html)
-- [常见问题](https://ark.analysys.cn/docs/faq.html)
 
 ### 3.3 删除项目
 argo可以在管理界面上通过项目管理模块来创建项目，但如果您想删除项目，需要您登陆argo的后台操作。
@@ -246,18 +226,16 @@ su - streaming
 /opt/soft/streaming/drop_project.sh $appkey
 ```
 
+# 产品用法及常见问题
 
-# 4. 问题处理
+完成了后续安装步骤就正式进入了易观方舟Argo的探索之旅，下面是一些快速开始的文档：
 
-   - [易观方舟Argo安装过程常见问题处理](http://geek.analysys.cn/topic/56)
+- [接入前准备](https://ark.analysys.cn/docs/integration-prepare.html)
+- [SDK指南](https://ark.analysys.cn/docs/sdk.html)
+- [功能使用说明](https://ark.analysys.cn/docs/function.html)
+- [常见问题](https://ark.analysys.cn/docs/faq.html)
 
-# 5. 社群
-
-希望我们的努力可以解放更多人的生产力，祝你使用顺利！
-
-官方论坛 https://geek.analysys.cn
-
-# 6. 热切地寻找志同道合的小伙伴
+# 热切地寻找志同道合的小伙伴
 
 正如你所见，我们希望通过易观 Argo 能让更多的早期团队也具备商业级用户行为驱动的能力。我们通过社区的方式来运营此版本，就是希望 Argo 能是社会的，而不是私有的。如果你认同我们的做法，并且也想贡献一份力量，无论你是否在易观，都有可以成为 Argo 社区的一员。
 
@@ -272,3 +250,9 @@ su - streaming
 有想法的小伙伴可以给 zhangxiaoliang@analysys.com.cn 发送邮件，或者通过任何方式联系到 Argo 同学，并注明来意。
 
 期待与你共建用户行为分析以及基于用户行为驱动更多业务的社区！
+
+# 社群
+
+希望我们的努力可以解放更多人的生产力，祝你使用顺利！
+
+官方论坛 https://geek.analysys.cn
