@@ -10,6 +10,10 @@
 
 - 最新版：[4.3.1](http://arkinstall.analysys.cn/)
 
+## 他们在用
+
+![](imgs/customers.png)
+
 ## 功能模块
 
 * [渠道分析](https://docs.analysys.cn/ark/features/analytics/channel)
