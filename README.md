@@ -10,11 +10,27 @@
 
 - 最新版：[4.3.1](http://arkinstall.analysys.cn/)
 
-## 他们在用
+## 为什么你需要 Argo ？
+
+目前市面上能做用户行为数据收集和分析的产品很多，有的例如 Google Analytics、百度统计和友盟能基础数据统计和分析（当然 GA 能做更多事情只不过也需要更多的学习成本）。这类工具提供相似的指标分析体系，入门相对简单，可如果你需要数据做更多事情时也会发现他们无法满足。常见的场景有：
+
+- 创建自定义的指标
+- 将同一产品不同客户端的用户数据汇总分析
+- 将数据明细导出到别的平台使用
+- 基于实时数据驱动其它过程
+- 管理用户分群并导出到其它平台使用
+- 数据私有化而不是存在它们那里
+- 更多他们不没有的分析模型
+
+来自用户的数据是未来企业日常工作中会用到的基本元素，我们提倡“**早收集，自己存，存明细，分析快，导出易**”。如果你现在还在考虑用户行为相关的数据产品，可以先花几分钟部署 Argo 试一下。相信会给你的决策提供帮助。
+
+## 他们已经在用
 
 ![](imgs/customers.png)
 
-## 功能模块
+## Argo 提供的功能
+
+### 分析类
 
 * [渠道分析](https://docs.analysys.cn/ark/features/analytics/channel)
 * [事件分析](https://docs.analysys.cn/ark/features/analytics/event)
@@ -27,6 +43,18 @@
 * [间隔分析](https://docs.analysys.cn/ark/features/analytics/jian-ge-fen-xi)
 * [属性分析](https://docs.analysys.cn/ark/features/analytics/shu-xing-fen-xi)
 * [SQL查询](https://docs.analysys.cn/ark/features/analytics/sql)
+
+### 用户类
+
+* [用户群管理](https://docs.analysys.cn/ark/features/segmentation/profile)
+* [用户行为轨迹](https://docs.analysys.cn/ark/features/segmentation/user-sequence)
+
+### 动作类
+
+* [发送系统通知](https://docs.analysys.cn/ark/features/operation/pushmessage)（极光、个推、百度、小米、华为）
+* [发送电子邮件](https://docs.analysys.cn/ark/features/operation/email)（SendCloud）
+* [发送短息](https://docs.analysys.cn/ark/features/operation/sms)（腾讯云短信、云集、领驭、乐信通）
+* [广告活动管理](https://docs.analysys.cn/ark/features/operation/utm)（UTM、APP扫码）
 
 ## 问题反馈
 
