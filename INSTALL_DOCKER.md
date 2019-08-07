@@ -2,9 +2,11 @@
 
 不建议将 Docker 安装版作为生产环境来使用，会有性能的损失和稳定性的风险。但由于 Docker 的便利性，我们依然欢迎大家尝试并且非常希望收到大家的反馈。
 
+开始前，请确保 docker 的安装磁盘有 100G 以上的剩余空间。
+
 ## 安装 Docker
 
-如果已经安装好docker 请直接进入[下一步](https://github.com/analysys/argo-installer/new/master#%E5%AE%89%E8%A3%85-argo)。
+如果已经安装好 docker 请直接进入[下一步](https://github.com/analysys/argo-installer/new/master#%E5%AE%89%E8%A3%85-argo)。
 
 ### 关闭防火墙
 
