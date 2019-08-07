@@ -313,8 +313,8 @@ done
 #获取argo版本号
 while true
 do
-        read -p "`echo -e "请输入argo版本号.默认[${c_yellow}4.1.17${c_end}] ："`" argo_ver
-        if [ "${argo_ver:=4.1.17}" == "None" ];then
+        read -p "`echo -e "请输入argo版本号.默认[${c_yellow}4.3.1${c_end}] ："`" argo_ver
+        if [ "${argo_ver:=4.3.1}" == "None" ];then
 
                 echo -e "${c_red}argo版本号不能为空。${c_end}"
                 continue
@@ -323,7 +323,7 @@ do
         fi
 done
 
-#argo_ver=4.1.17
+#argo_ver=4.3.1
 
 os_ver1=centos7
 #获取root用户密码
