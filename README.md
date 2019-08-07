@@ -35,7 +35,7 @@
 
 # 安装说明
 
-- [通过脚本安装](INSTALL_SCRIPT.md)
+- [通过脚本安装](INSTALL_SCRIPT.md)（推荐！）
 - [通过 Docker 安装](INSTALL_DOCKER.md)
 
 # 常见问题
