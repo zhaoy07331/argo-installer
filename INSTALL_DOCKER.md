@@ -6,7 +6,7 @@
 
 ## 安装 Docker
 
-如果已经安装好 docker 请直接进入[下一步](https://github.com/analysys/argo-installer/new/master#%E5%AE%89%E8%A3%85-argo)。
+如果已经安装好 docker 请直接进入[下一步](https://github.com/analysys/argo-installer/blob/master/INSTALL_DOCKER.md#%E5%AE%89%E8%A3%85-argo)。
 
 ### 关闭防火墙
 
