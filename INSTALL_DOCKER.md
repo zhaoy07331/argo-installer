@@ -83,7 +83,7 @@ docker run -itd --privileged --name argo3 --hostname ark1 -v /kudu:/data1/kudu -
 - -p 4005:4005  // Argo 端口
 - -p 8080:8080  // Ambari 端口
 - -p 8089:8089  // SDK 上报端口
-- -p 9091:9091  // 可视化埋点 上报端口
+- -p 9091:9091  // 可视化埋点请求配置信息的 WebSocket 端口
 - -m 8G|16G|32G // 分配的内存大小，根据版本不同而定
 
 容器启动后，系统初始化10分钟左右，之后就可以访问了。
