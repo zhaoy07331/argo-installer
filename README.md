@@ -8,7 +8,7 @@
 
 也希望能在很快的未来，我们会和更多的开发者和社区爱好者一起，带动更多的朋友一起来做这件有意义的事情。
 
-- 最新版：[4.3.1](http://arkinstall.analysys.cn/)
+- 最新版：[4.3.4](http://arkinstall.analysys.cn/)
 
 ## 为什么你需要 Argo ？
 
