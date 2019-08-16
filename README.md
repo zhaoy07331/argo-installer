@@ -8,7 +8,11 @@
 
 也希望能在很快的未来，我们会和更多的开发者和社区爱好者一起，带动更多的朋友一起来做这件有意义的事情。
 
-- 最新版：[4.3.4](http://arkinstall.analysys.cn/)
+最新版：[4.3.4](http://arkinstall.analysys.cn/) 
+
+**What's New in 4.3.4**
+ - 现在可以通过 API 查询包括人群、事件分析、留存分析、转化漏斗及元数据等数据了
+ - 更多更新内容在[这里](https://docs.analysys.cn/ark/release-notes)查看
 
 ## 为什么你需要 Argo ？
 
