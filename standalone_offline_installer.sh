@@ -59,10 +59,10 @@ function install()
         if [ -f /opt/soft/analysys_installer_base_$osType.tar.gz.md5 ];then
             echo "已存在.md5文件，开始检查..."
             set +e
-            checksum=`md5sum -c  analysys_installer_base_$osType.tar.gz.md5`
+            checksum=`md5sum -c  analysys_installer_base_$osType.tar.gz.md5 | grep OK`
             set -e
 
-            if [[ "$checksum" == analysys_installer_base_$osType.tar.gz:* ]];then
+            if [[ "$checksum" != "" ]];then
                 echo "文件完整，跳过下载"
                 echo " "
                 echo " "
@@ -94,9 +94,9 @@ function install()
         if [ -f /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5 ];then
             echo "已存在.md5文件，开始检查..."
             set +e
-            checksum=`md5sum  -c   argo_${osType}_$targetVersion.tar.gz.md5`
+            checksum=`md5sum  -c   argo_${osType}_$targetVersion.tar.gz.md5 | grep OK`
             set -e
-            if [[ "$checksum" == argo_${osType}_$targetVersion.tar.gz:* ]];then
+            if [[ "$checksum" != "" ]];then
                 echo "文件完整，跳过下载"
                 echo " "
                 echo " "
