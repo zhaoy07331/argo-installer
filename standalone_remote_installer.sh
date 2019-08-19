@@ -61,7 +61,7 @@ function install()
         fi
         wget -c -O  /opt/soft/analysys_installer_base_$osType.tar.gz.md5 $basemd5Url
         set +e
-        checksum=`md5sum -c  analysys_installer_base_$osType.tar.gz.md5 | grep OK`
+        checksum=`md5sum -c  analysys_installer_base_$osType.tar.gz.md5 | grep OK | head -n 1`
         set -e
 
         if [[ "$checksum" != ""  ]];then
@@ -77,7 +77,7 @@ function install()
             rm -rf /opt/soft/analysys_installer_base_$osType.tar.gz.md5
             wget -c -O  /opt/soft/analysys_installer_base_$osType.tar.gz.md5 $basemd5Url
             set +e
-            checksum=`md5sum  -c  analysys_installer_base_$osType.tar.gz.md5 | grep OK`
+            checksum=`md5sum  -c  analysys_installer_base_$osType.tar.gz.md5 | grep OK | head -n 1`
             set -e
             if [[ "$checksum" != "" ]];then
                 echo "文件完整，下载成功"
@@ -98,7 +98,7 @@ function install()
         wget -c -O  /opt/soft/analysys_installer_base_$osType.tar.gz.md5 $basemd5Url
 
         set +e
-        checksum=`md5sum  -c  analysys_installer_base_$osType.tar.gz.md5 | grep OK`
+        checksum=`md5sum  -c  analysys_installer_base_$osType.tar.gz.md5 | grep OK | head -n 1`
         set -e
         if [[ "$checksum" != "" ]];then
             echo "文件完整，下载成功"
@@ -124,7 +124,7 @@ function install()
         fi
         wget -c -O  /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5 $arkmd5Url
         set +e
-        checksum=`md5sum  -c   argo_${osType}_$targetVersion.tar.gz.md5 | grep OK`
+        checksum=`md5sum  -c   argo_${osType}_$targetVersion.tar.gz.md5 | grep OK | head -n 1`
         set -e
         if [[ "$checksum" != "" ]];then
             echo "文件完整，跳过下载"
@@ -139,7 +139,7 @@ function install()
             rm -rf /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5
             wget -c -O  /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5 $arkmd5Url
             set +e
-            checksum=`md5sum -c argo_${osType}_$targetVersion.tar.gz.md5 | grep OK`
+            checksum=`md5sum -c argo_${osType}_$targetVersion.tar.gz.md5 | grep OK | head -n 1`
             set -e
             if [[ "$checksum" != "" ]];then
                 echo "文件完整，下载成功"
@@ -159,7 +159,7 @@ function install()
 
         wget -c -O  /opt/soft/argo_${osType}_$targetVersion.tar.gz.md5 $arkmd5Url
         set +e
-        checksum=`md5sum -c argo_${osType}_$targetVersion.tar.gz.md5 | grep OK`
+        checksum=`md5sum -c argo_${osType}_$targetVersion.tar.gz.md5 | grep OK | head -n 1`
         set -e
         if [[ "$checksum" != "" ]];then
             echo "文件完整，下载成功"
