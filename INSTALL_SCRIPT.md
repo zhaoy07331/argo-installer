@@ -106,7 +106,7 @@
 以下操作以4.3.1版本为样例
 1. 在线安装：配置服务器下载地址，修改/opt/soft/config.properties文件
     ```bash
-    repo_url=argo-repo-url
+    repo_url=http://ark_install.analysys.cn/
     ```
 
     ```bash
