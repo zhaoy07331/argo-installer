@@ -60,17 +60,16 @@
 * [发送短息](https://docs.analysys.cn/ark/features/operation/sms)（腾讯云短信、云集、领驭、乐信通）
 * [广告活动管理](https://docs.analysys.cn/ark/features/operation/utm)（UTM、APP扫码）
 
-## 问题反馈
-
-* 提交[新功能需求](https://github.com/analysys/argo-installer/issues/new)
-* 为[热门需求](https://github.com/analysys/argo-installer/issues?q=is%3Aopen+is%3Aissue+label%3A%22feature+request%22+sort%3Areactions-%2B1-desc)投票
-
 # 安装说明
 
 - [通过脚本安装](INSTALL_SCRIPT.md)（推荐！）
 - [通过 Docker 安装](INSTALL_DOCKER.md)
 
-# 常见问题
+## 常见问题
+
+部署中遇到问题可以看这里：
+
+- [部署问题](https://github.com/analysys/argo-installer/issues?utf8=✓&q=label%3Adocs+)
 
 完成了后续安装步骤就正式进入了易观方舟Argo的探索之旅，下面是一些快速开始的文档：
 
@@ -78,6 +77,11 @@
 - [SDK指南](https://ark.analysys.cn/docs/sdk.html)
 - [功能介绍](https://ark.analysys.cn/docs/function.html)
 - [其它问题](https://ark.analysys.cn/docs/faq.html)
+
+## 提交反馈
+
+* 提交[新功能需求](https://github.com/analysys/argo-installer/issues/new)
+* 为[热门需求](https://github.com/analysys/argo-installer/issues?q=is%3Aopen+is%3Aissue+label%3A%22feature+request%22+sort%3Areactions-%2B1-desc)投票
 
 # 热切地寻找志同道合的小伙伴
 
