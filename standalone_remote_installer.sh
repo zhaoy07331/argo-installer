@@ -464,10 +464,17 @@ if [ ""$argo_action == "install" ];then
         echo "${c_yellow}没有检查到数据盘 /data1 请先挂载数据盘。${c_end}"
         exit 1
     else
-        if [ $data1_size -lt 100 ];then
+        if [ $data1_size -lt 95 ];then
             echo "${c_yellow}数据盘 /data1 空间不大于100G，无法安装。${c_end}"
             exit 1
         fi
+    fi
+
+    echo "检查/data1目录的文件系统"
+    data1_fs=`df -Th | grep data1 | awk '{print $2}'`
+    if [ ""$data1_fs != "ext4" -a ""$data1_fs != "xfs" ];then
+        echo "/data1目录的文件系统必须是ext4或xfs"
+        exit 1
     fi
 
     echo "检查是否已经安装了方舟..."
